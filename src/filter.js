@@ -15,7 +15,7 @@ recit.filter.cahiercanada.Main = class
                 return;
             }
 
-            alert("saved");
+            alert("L'action a été complétée avec succès.");
         }
         let editor = new recit.components.EditorDecorator(name+"Container");
 
