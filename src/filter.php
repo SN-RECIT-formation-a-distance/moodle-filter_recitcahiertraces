@@ -1,18 +1,16 @@
 <?php
 
-//require_once("$CFG->libdir/formslib.php");
-//require_once("$CFG->libdir/form/editor.php");
-require_once($CFG->dirroot . "/mod/recitcahiercanada/common/php/PersistCtrl.php");
-require_once($CFG->dirroot . "/mod/recitcahiercanada/common/php/Utils.php");
+require_once($CFG->dirroot . "/local/recitcommon/php/PersistCtrl.php");
+require_once($CFG->dirroot . "/local/recitcommon/php/Utils.php");
 
 class filter_recitcahiercanada extends moodle_text_filter {
 	
 	public function setup($page, $context) {
 		global $CFG, $OUTPUT;
 		
-		$page->requires->js(new moodle_url($CFG->wwwroot . '/mod/recitcahiercanada/common/js/WebApi.js'), true);
-		$page->requires->js(new moodle_url($CFG->wwwroot . '/mod/recitcahiercanada/common/js/Components.js'), true);
-		$page->requires->js(new moodle_url($CFG->wwwroot . '/mod/recitcahiercanada/common/js/Utils.js'), true);
+		$page->requires->js(new moodle_url($CFG->wwwroot . '/local/recitcommon/js/RecitApi.js'), true);
+		$page->requires->js(new moodle_url($CFG->wwwroot . '/local/recitcommon/js/Components.js'), true);
+		$page->requires->js(new moodle_url($CFG->wwwroot . '/local/recitcommon/js/Utils.js'), true);
 		$page->requires->js(new moodle_url($CFG->wwwroot .'/filter/recitcahiercanada/filter.js'), true);
 	}	
 	 
@@ -64,7 +62,7 @@ class filter_recitcahiercanada extends moodle_text_filter {
 			$result .= "<br/>";	
 		}
 		
-		$result .= sprintf("<button class='recit-btn recit-btn-primary' onclick='recitFilterCahierCanada.onSave(\"%s\", \"%ld\", \"%ld\")'>%s</button>", 
+		$result .= sprintf("<button class='btn btn-primary' onclick='recitFilterCahierCanada.onSave(\"%s\", \"%ld\", \"%ld\")'>%s</button>", 
 						$name, $ccCmId, $userId,  get_string('save', "filter_recitcahiercanada"));
 		$result .= "</div>";				
 		return $result;
