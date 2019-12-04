@@ -34,7 +34,7 @@ class filter_recitcahiercanada extends moodle_text_filter {
 	}		
 
 	public function filter($text, array $options = array()) {
-		global $DB, $USER;
+		global $DB, $USER, $PAGE;
 
 		if (!is_string($text) or empty($text)) {
 			// Non-string data can not be filtered anyway.
@@ -48,15 +48,20 @@ class filter_recitcahiercanada extends moodle_text_filter {
 				// $match[1] = offset
 				$json = json_decode($match[0]);
 				
-				if(isset($json->cccmid)){
+				$obj = null;
+				if(isset($json->intCode)){
+					$obj = PersistCtrl::getInstance($DB)->getPersonalNote(null, $USER->id, $json->intCode, $PAGE->cm->id);					
+				}
+				else if(isset($json->cccmid)){
 					$obj = PersistCtrl::getInstance($DB)->getPersonalNote($json->cccmid, $USER->id);
-					// if $obj is null then the note does not exist
-					if($obj != null){
-						if(!isset($json->nbLines)){
-							$json->nbLines = 15;
-						}
-						$text = str_replace($match[0], $this->getPersonalNoteForm($json->cccmid, $USER->id, $obj->noteTitle, $obj->note, $json->nbLines, $obj->teacherTip), $text);
+				}
+
+				// if $obj is null then the note does not exist
+				if($obj != null){
+					if(!isset($json->nbLines)){
+						$json->nbLines = 15;
 					}
+					$text = str_replace($match[0], $this->getPersonalNoteForm($obj->ccCmId, $USER->id, $obj->noteTitle, $obj->note, $json->nbLines, $obj->teacherTip), $text);
 				}
 			}
 		}
