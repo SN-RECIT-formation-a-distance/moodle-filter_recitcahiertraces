@@ -57,6 +57,9 @@ class filter_recitcahiercanada extends moodle_text_filter {
 					$obj = PersistCtrl::getInstance($DB)->getPersonalNote($json->cccmid, $USER->id);
 					$intCode = $json->cccmid;
 				}
+				else{
+					$intCode = '';
+				}
 
 				// if $obj is null then the note does not exist
 				if($obj != null){
