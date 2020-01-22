@@ -40,7 +40,8 @@ class filter_recitcahiercanada extends moodle_text_filter {
 			// Non-string data can not be filtered anyway.
 			return $text;
 		}
-	 
+     
+        // ATTENTION: other filter plugins (like Generico) may match this condition too
 		if(preg_match_all('~\{(?:[^{}]|(?R))*\}~', $text,  $matches, PREG_OFFSET_CAPTURE)){
 			$matches = $matches[0];
 			foreach($matches as $match){
@@ -50,15 +51,18 @@ class filter_recitcahiercanada extends moodle_text_filter {
 				
 				$obj = null;
 				if(isset($json->intCode)){
-					$obj = PersistCtrl::getInstance($DB)->getPersonalNote(null, $USER->id, $json->intCode, $PAGE->cm->id);					
+                    $obj = PersistCtrl::getInstance($DB)->getPersonalNote(null, $USER->id, $json->intCode, $PAGE->cm->id);					
+                    if($obj == null){
+                        $text = "Erreur: code d'intégration intCode: $json->intCode introuvable.";
+                    }
 					$intCode = $json->intCode;
 				}
 				else if(isset($json->cccmid)){
-					$obj = PersistCtrl::getInstance($DB)->getPersonalNote($json->cccmid, $USER->id);
-					$intCode = $json->cccmid;
-				}
-				else{
-					$intCode = '';
+                    $obj = PersistCtrl::getInstance($DB)->getPersonalNote($json->cccmid, $USER->id);
+                    if($obj == null){
+                        $text = "Erreur: code d'intégration cccmid: $json->cccmid introuvable.";
+                    }
+                    $intCode = $json->cccmid;                    
 				}
 
 				// if $obj is null then the note does not exist
@@ -67,9 +71,6 @@ class filter_recitcahiercanada extends moodle_text_filter {
 						$json->nbLines = 15;
 					}
 					$text = str_replace($match[0], $this->getPersonalNoteForm($obj->ccCmId, $USER->id, $obj->noteTitle, $obj->note, $json->nbLines, $obj->teacherTip), $text);
-				}
-				else{
-					$text = "Erreur: code d'intégration $intCode introuvable.";
 				}
 			}
 		}
