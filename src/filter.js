@@ -37,8 +37,8 @@ recit.filter.cahiercanada.Main = class
 		}
 	}
 	
-    onSave(name, ccCmId, userId){
-		let data = {personalNoteId: 0, ccCmId: ccCmId, userId: userId, note: "" };		
+    onSave(name, ccCmId, userId, courseId){
+		let data = {personalNoteId: 0, ccCmId: ccCmId, userId: userId, note: "", courseId: courseId };		
 		let that = this;
 		
         let callback = function(result){

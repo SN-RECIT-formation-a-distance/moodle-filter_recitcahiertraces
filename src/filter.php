@@ -70,7 +70,7 @@ class filter_recitcahiercanada extends moodle_text_filter {
 					if(!isset($json->nbLines)){
 						$json->nbLines = 15;
 					}
-					$text = str_replace($match[0], $this->getPersonalNoteForm($obj->ccCmId, $USER->id, $obj->noteTitle, $obj->note, $json->nbLines, $obj->teacherTip), $text);
+					$text = str_replace($match[0], $this->getPersonalNoteForm($obj->ccCmId, $USER->id, $obj->noteTitle, $obj->note, $obj->noteItemid, $json->nbLines, $obj->teacherTip, $obj->courseId), $text);
 				}
 			}
 		}
@@ -78,12 +78,15 @@ class filter_recitcahiercanada extends moodle_text_filter {
 		return $text;
 	}
 
-	public function getPersonalNoteForm($ccCmId, $userId, $label, $content, $nbRows, $teacherTip){	
+	public function getPersonalNoteForm($ccCmId, $userId, $label, $content, $itemId, $nbRows, $teacherTip, $courseId){	
+		//global $COURSE;
 		$name = "cccmid$ccCmId";
+
+		$context = context_course::instance($courseId);
 
 		$result = "<div>";	
 		$result .= sprintf("<label class='recitcahierlabel'>%s</label>", $label);
-		$result .= Utils::createEditorHtml(true, "{$name}Container", $name, $content, $nbRows);
+		$result .= Utils::createEditorHtml(true, "{$name}Container", $name, $content, $nbRows, $context, $itemId);
 		$result .= "<br/>";
 
 		if(strlen($teacherTip) > 0){
@@ -91,8 +94,8 @@ class filter_recitcahiercanada extends moodle_text_filter {
 			$result .= "<br/>";	
 		}
 		
-		$result .= sprintf("<button class='btn btn-primary' onclick='recitFilterCahierCanada.onSave(\"%s\", \"%ld\", \"%ld\")'>%s</button>", 
-						$name, $ccCmId, $userId, get_string('save', "filter_recitcahiercanada"));
+		$result .= sprintf("<button class='btn btn-primary' onclick='recitFilterCahierCanada.onSave(\"%s\", \"%ld\", \"%ld\", \"%ld\")'>%s</button>", 
+						$name, $ccCmId, $userId, $courseId, get_string('save', "filter_recitcahiercanada"));
 		$result .= "</div>";				
 		return $result;		
 	}	
