@@ -27,6 +27,8 @@ recit.filter.cahiercanada.Main = class
 {
     constructor(){       
         this.onSave = this.onSave.bind(this);
+        this.onReset = this.onReset.bind(this);
+        this.onCallback = this.onCallback.bind(this);
     }
 	
 	showFeedback(ccCmId){
@@ -38,23 +40,41 @@ recit.filter.cahiercanada.Main = class
 	}
 	
     onSave(name, ccCmId, userId, courseId){
-		let data = {personalNoteId: 0, ccCmId: ccCmId, userId: userId, note: "", courseId: courseId };		
-		let that = this;
-		
-        let callback = function(result){
-            if(!result.success){
-                alert(result.msg);				
-                return;
-            }
-
-			that.showFeedback(ccCmId);
-            alert("L'action a été complétée avec succès.");
-        }
-		
-		let editor = new recit.components.EditorDecorator(name+"Container");
+		let data = {personalNoteId: 0, ccCmId: ccCmId, userId: userId, note: {text: "", itemid: 0}, courseId: courseId };		
+        
+        let editor = new recit.components.EditorDecorator(name+"Container");
 		data.note = editor.getValue();
 
-        recit.http.WebApi.instance().saveStudentNote(data, callback);
+        recit.http.WebApi.instance().saveStudentNote(data, (result) => this.onCallback(name, result, result.data.note.text, true));
+    }
+
+    onReset(name, ccCmId, userId, courseId){
+        let data = {personalNoteId: 0, ccCmId: ccCmId, userId: userId, note: {text: "", itemid: 0}, courseId: courseId };		
+        
+        if(window.confirm(M.str.filter_recitcahiercanada.msgConfirmReset)){
+            recit.http.WebApi.instance().saveStudentNote(data, (result) => this.onCallback(name, result, "", false));
+        }
+    }
+
+    onCallback(name, result, content, showFeedback){
+        if(!result.success){
+            alert(result.msg);				
+            return;
+        }
+
+        // refresh the many instances of the integration code
+        let commonName = name.substr(0, name.length -1); // remove the editor counter
+        let editors = document.querySelectorAll(`textarea[id^="${commonName}"]`);
+        for(let el of editors){
+            let editor = new recit.components.EditorDecorator(el.getAttribute('id')+"Container");
+            editor.setValue(content);
+        }
+        
+        if(showFeedback){
+            this.showFeedback(result.data.ccCmId);
+        }
+        
+        alert(M.str.filter_recitcahiercanada.msgSuccess);
     }
 }
 

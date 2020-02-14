@@ -6,3 +6,5 @@ $string['save'] = 'Save';
 $string['noteTitle'] = 'Note Title';
 $string['msgSuccess'] = "The action has been completed successfully.";
 $string['teacherTip'] = 'Teacher feedback';
+$string['reset'] = 'Reset';
+$string['msgConfirmReset'] = "Do you confirm the reset?";
