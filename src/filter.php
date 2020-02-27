@@ -19,7 +19,7 @@
  * @copyright 2019 RÉCIT 
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-require_once($CFG->dirroot . "/local/recitcommon/php/PersistCtrl.php");
+require_once($CFG->dirroot . "/local/recitcommon/php/PersistCtrlCahierTraces.php");
 require_once($CFG->dirroot . "/local/recitcommon/php/Utils.php");
 
 class filter_recitcahiercanada extends moodle_text_filter {
@@ -66,14 +66,14 @@ class filter_recitcahiercanada extends moodle_text_filter {
 				
 				$obj = null;
 				if(isset($json->intCode)){
-                    $obj = PersistCtrl::getInstance($DB)->getPersonalNote(null, $USER->id, $json->intCode, $PAGE->cm->id);					
+                    $obj = CahierTracesPersistCtrl::getInstance($DB)->getPersonalNote(null, $USER->id, $json->intCode, $PAGE->cm->id);					
                     if($obj == null){
                         $text = "Erreur: code d'intégration intCode: $json->intCode introuvable.";
                     }
 					$intCode = $json->intCode;
 				}
 				else if(isset($json->cccmid)){
-                    $obj = PersistCtrl::getInstance($DB)->getPersonalNote($json->cccmid, $USER->id);
+                    $obj = CahierTracesPersistCtrl::getInstance($DB)->getPersonalNote($json->cccmid, $USER->id);
                     if($obj == null){
                         $text = "Erreur: code d'intégration cccmid: $json->cccmid introuvable.";
                     }
