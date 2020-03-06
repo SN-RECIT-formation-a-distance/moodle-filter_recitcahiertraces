@@ -53,7 +53,11 @@ class filter_recitcahiercanada extends moodle_text_filter {
 		if (!is_string($text) or empty($text)) {
 			// Non-string data can not be filtered anyway.
 			return $text;
-		}
+        }
+        
+        if(empty($PAGE->cm)){
+            return $text;
+        }
      
         // ATTENTION: other filter plugins (like Generico) may match this condition too
 		if(preg_match_all('~\{(?:[^{}]|(?R))*\}~', $text,  $matches, PREG_OFFSET_CAPTURE)){
