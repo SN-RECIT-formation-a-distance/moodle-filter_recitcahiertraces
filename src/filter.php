@@ -55,7 +55,7 @@ class filter_recitcahiercanada extends moodle_text_filter {
 			return $text;
         }
         
-        if(empty($PAGE->cm)){
+        if($PAGE->cm == null){
             return $text;
         }
      
