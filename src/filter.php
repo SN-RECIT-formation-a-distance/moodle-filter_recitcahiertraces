@@ -86,14 +86,13 @@ class filter_recitcahiercanada extends moodle_text_filter {
 
 				// if $obj is null then the note does not exist
 				if($obj != null){
-					if(!isset($json->nbLines)){
-						$json->nbLines = 15;
-                    }
+					if(!isset($json->nbLines)){ $json->nbLines = 15; }
+                    if(!isset($json->color)){ $json->color = 'inherit'; }
+                    if(!isset($json->btnSaveVariant)){ $json->btnSaveVariant = 'btn-primary'; }
+                    if(!isset($json->btnResetVariant)){ $json->btnResetVariant = 'btn-secondary'; }
 
-                    $replace = $this->getPersonalNoteForm($obj->ccCmId, $USER->id, $obj->noteTitle, $obj->note, $obj->noteItemid, $json->nbLines, $obj->teacherTip, $obj->courseId);
+                    $replace = $this->getPersonalNoteForm($obj, $USER->id, $json);
                     $text = $this->str_replace_first($match[0], $replace, $text);
-
-					//$text = str_replace($match[0], $this->getPersonalNoteForm($obj->ccCmId, $USER->id, $obj->noteTitle, $obj->note, $obj->noteItemid, $json->nbLines, $obj->teacherTip, $obj->courseId), $text);
 				}
 			}
 		}
@@ -101,32 +100,34 @@ class filter_recitcahiercanada extends moodle_text_filter {
 		return $text;
 	}
 
-	public function getPersonalNoteForm($ccCmId, $userId, $label, $content, $itemId, $nbRows, $teacherTip, $courseId){	
+	public function getPersonalNoteForm($dbData, $userId, $intCode){	
         $this->nbEditorAtto++;
 
 		//global $COURSE;
-		$name = sprintf( "cccmid%satto%s", $ccCmId, $this->nbEditorAtto);
+		$name = sprintf( "cccmid%satto%s", $dbData->ccCmId, $this->nbEditorAtto);
 
-		$context = context_course::instance($courseId);
+		$context = context_course::instance($dbData->courseId);
 
-		$result = "<div>";	
-		$result .= sprintf("<label class='recitcahierlabel'>%s</label>", $label);
-		$result .= Utils::createEditorHtml(true, "{$name}Container", $name, $content, $nbRows, $context, $itemId);
+		$result = "<div style='padding: 1rem;'>";	
+		$result .= sprintf("<label style='font-weight: 500; font-size: 20px; color: {$intCode->color}' class='recitcahierlabel'>%s</label>", $dbData->noteTitle);
+		$result .= Utils::createEditorHtml(true, "{$name}Container", $name, $dbData->note->text, $intCode->nbLines, $context, $dbData->note->itemid);
 		$result .= "<br/>";
 
-		if(strlen($teacherTip) > 0){
-			$result .= sprintf("<div id='ctFeedback$ccCmId' style='display: none;' class='alert alert-warning' role='alert'> <strong>%s</strong><br/>%s</div>", get_string('teacherTip', "filter_recitcahiercanada"), $teacherTip);
+		if(strlen($dbData->teacherTip) > 0){
+            $result .= sprintf("<div id='ctFeedback{$dbData->ccCmId}' style='display: none;' class='alert alert-warning' role='alert'> <strong>%s</strong><br/>%s</div>", 
+                                get_string('teacherTip', "filter_recitcahiercanada"), $dbData->teacherTip);
 			$result .= "<br/>";	
 		}
         
-        $result .= "<div class='btn-group'>";
-        $result .= sprintf("<button class='btn btn-secondary' onclick='recitFilterCahierCanada.onReset(\"%s\", \"%ld\", \"%ld\", \"%ld\")'>%s</button>", 
-						$name, $ccCmId, $userId, $courseId, get_string('reset', "filter_recitcahiercanada"));
-		$result .= sprintf("<button class='btn btn-primary' onclick='recitFilterCahierCanada.onSave(\"%s\", \"%ld\", \"%ld\", \"%ld\")'>%s</button>", 
-                        $name, $ccCmId, $userId, $courseId, get_string('save', "filter_recitcahiercanada"));
+        $result .= "<div class='btn-group' style='display: flex; justify-content: center'>";
+        $result .= sprintf("<button class='btn $intCode->btnResetVariant' onclick='recitFilterCahierCanada.onReset(\"%s\", \"%ld\", \"%ld\", \"%ld\")'>%s</button>", 
+						$name, $dbData->ccCmId, $userId, $dbData->courseId, get_string('reset', "filter_recitcahiercanada"));
+		$result .= sprintf("<button class='btn $intCode->btnSaveVariant' onclick='recitFilterCahierCanada.onSave(\"%s\", \"%ld\", \"%ld\", \"%ld\")'>%s</button>", 
+                        $name, $dbData->ccCmId, $userId, $dbData->courseId, get_string('save', "filter_recitcahiercanada"));
         $result .= '</div>';
 
-		$result .= "</div>";				
+        $result .= "</div>";		
+        		
 		return $result;		
 	}	
 }
