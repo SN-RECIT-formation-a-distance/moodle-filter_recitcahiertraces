@@ -36,7 +36,7 @@ class filter_recitcahiercanada extends moodle_text_filter {
 
         $page->requires->string_for_js('msgSuccess', 'filter_recitcahiercanada');
         $page->requires->string_for_js('msgConfirmReset', 'filter_recitcahiercanada');
-        
+        $page->requires->string_for_js('msgSaveAuto', 'filter_recitcahiercanada');
 	}		
 
     public function str_replace_first($search, $replace, $subject) {
@@ -108,22 +108,23 @@ class filter_recitcahiercanada extends moodle_text_filter {
 
 		$context = context_course::instance($dbData->courseId);
 
-		$result = "<div style='padding: 1rem;'>";	
+		$result = "<div style='padding: 1rem;' data-pn-name='$name' data-pn-cccmid='$dbData->ccCmId' data-pn-userid='$userId' data-pn-courseid='$dbData->courseId'>";	
 		$result .= sprintf("<label style='font-weight: 500; font-size: 20px; color: {$intCode->color}' class='recitcahierlabel'>%s</label>", $dbData->noteTitle);
 		$result .= Utils::createEditorHtml(true, "{$name}Container", $name, $dbData->note->text, $intCode->nbLines, $context, $dbData->note->itemid);
 		$result .= "<br/>";
 
 		if(strlen($dbData->teacherTip) > 0){
-            $result .= sprintf("<div id='ctFeedback{$dbData->ccCmId}' style='display: none;' class='alert alert-warning' role='alert'> <strong>%s</strong><br/>%s</div>", 
+            $display = ($dbData->isTemplate == 1 ? 'none' : 'block');
+            $result .= sprintf("<div id='ctFeedback{$dbData->ccCmId}' style='display: $display;' class='alert alert-warning' role='alert'> <strong>%s</strong><br/>%s</div>", 
                                 get_string('teacherTip', "filter_recitcahiercanada"), $dbData->teacherTip);
 			$result .= "<br/>";	
 		}
         
         $result .= "<div class='btn-group' style='display: flex; justify-content: center'>";
-        $result .= sprintf("<button class='btn $intCode->btnResetVariant' onclick='recitFilterCahierCanada.onReset(\"%s\", \"%ld\", \"%ld\", \"%ld\")'>%s</button>", 
-						$name, $dbData->ccCmId, $userId, $dbData->courseId, get_string('reset', "filter_recitcahiercanada"));
-		$result .= sprintf("<button class='btn $intCode->btnSaveVariant' onclick='recitFilterCahierCanada.onSave(\"%s\", \"%ld\", \"%ld\", \"%ld\")'>%s</button>", 
-                        $name, $dbData->ccCmId, $userId, $dbData->courseId, get_string('save', "filter_recitcahiercanada"));
+        $result .= sprintf("<button class='btn $intCode->btnResetVariant' onclick='recitFilterCahierCanada.onReset(\"%s\")'>%s</button>", 
+						$name, get_string('reset', "filter_recitcahiercanada"));
+		$result .= sprintf("<button class='btn $intCode->btnSaveVariant' onclick='recitFilterCahierCanada.onSave(\"%s\")'>%s</button>", 
+                        $name, get_string('save', "filter_recitcahiercanada"));
         $result .= '</div>';
 
         $result .= "</div>";		

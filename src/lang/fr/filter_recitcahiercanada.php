@@ -8,3 +8,4 @@ $string['msgSuccess'] = "L'action a été complétée avec succès.";
 $string['teacherTip'] = "Rétroaction de l'enseignant";
 $string['reset'] = "Réinitialiser";
 $string['msgConfirmReset'] = "Confirmez-vous la réinitialisation?";
+$string['msgSaveAuto'] = "La note n'est pas encore enregistrée. Voulez-vous continuer et enregistrer la note?";

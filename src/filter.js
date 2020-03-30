@@ -27,53 +27,69 @@ recit.filter.cahiercanada.Main = class
 {
     constructor(){       
         this.onSave = this.onSave.bind(this);
+        this.onSaveAuto = this.onSaveAuto.bind(this);
         this.onReset = this.onReset.bind(this);
         this.onCallback = this.onCallback.bind(this);
-    }
-	
-	showFeedback(ccCmId){
-		let feedback = document.getElementById(`ctFeedback${ccCmId}`);	
-		
-		if(feedback !== null){
-			feedback.style.display = 'block';
-		}
-	}
-	
-    onSave(name, ccCmId, userId, courseId){
-		let data = {personalNoteId: 0, ccCmId: ccCmId, userId: userId, note: {text: "", itemid: 0}, courseId: courseId };		
-        
-        let editor = new recit.components.EditorDecorator(name+"Container");
-		data.note = editor.getValue();
+        this.init = this.init.bind(this);
 
-        recit.http.WebApi.instance().saveStudentNote(data, (result) => this.onCallback(name, result, result.data.note.text, true));
+        this.inputList = {};
+        this.init();
     }
 
-    onReset(name, ccCmId, userId, courseId){
-        let data = {personalNoteId: 0, ccCmId: ccCmId, userId: userId, note: {text: "", itemid: 0}, courseId: courseId };		
-        
-        if(window.confirm(M.str.filter_recitcahiercanada.msgConfirmReset)){
-            recit.http.WebApi.instance().saveStudentNote(data, (result) => this.onCallback(name, result, "", false));
+    init(){
+        let tmp = document.querySelectorAll(`div[data-pn-name]`);
+
+        for(let item of tmp){
+            let name = item.getAttribute('data-pn-name');
+            this.inputList[name] = {};
+            this.inputList[name].dom = item;
+            this.inputList[name].ccCmId = item.getAttribute('data-pn-cccmid');
+            this.inputList[name].userId = item.getAttribute('data-pn-userid');
+            this.inputList[name].courseId = item.getAttribute('data-pn-courseid');
+            this.inputList[name].editor = new recit.components.EditorDecorator(`${name}Container`);
+            this.inputList[name].editor.onFocusOutCallback = () => this.onSaveAuto(name);
+        }
+    }
+    
+    onSaveAuto(name){
+        if(window.confirm(M.str.filter_recitcahiercanada.msgSaveAuto)){
+            this.onSave(name);
         }
     }
 
-    onCallback(name, result, content, showFeedback){
+    onSave(name){
+        let input = this.inputList[name];
+		let data = {personalNoteId: 0, ccCmId: input.ccCmId, userId: input.userId, note: input.editor.getValue(), courseId: input.courseId };		
+        recit.http.WebApi.instance().saveStudentNote(data, (result) => this.onCallback(result));
+    }
+
+    onReset(name){
+        let input = this.inputList[name];
+        let data = {personalNoteId: 0, ccCmId: input.ccCmId, userId: input.userId, note: {text: "", itemid: 0}, courseId: input.courseId };		
+        
+        if(window.confirm(M.str.filter_recitcahiercanada.msgConfirmReset)){
+            recit.http.WebApi.instance().saveStudentNote(data, (result) => this.onCallback(result));
+        }
+    }
+
+    onCallback(result){
         if(!result.success){
             alert(result.msg);				
             return;
         }
 
         // refresh the many instances of the integration code
-        let commonName = name.substr(0, name.length -1); // remove the editor counter
-        let editors = document.querySelectorAll(`textarea[id^="${commonName}"]`);
-        for(let el of editors){
-            let editor = new recit.components.EditorDecorator(el.getAttribute('id')+"Container");
-            editor.setValue(content);
+        for(let attr in this.inputList){
+            // get all the common editors (same ccCmId)
+            if(attr.indexOf(`cccmid${result.data.ccCmId}`) >= 0){
+                this.inputList[attr].editor.setValue(result.data.note.text);
+                let feedbackList = this.inputList[attr].dom.querySelectorAll(`[id="ctFeedback${this.inputList[attr].ccCmId}"]`);	
+                for(let feedback of feedbackList){
+                    feedback.style.display = (result.data.isTemplate === 1 ? 'none' : 'block');
+                }
+            }
         }
-        
-        if(showFeedback){
-            this.showFeedback(result.data.ccCmId);
-        }
-        
+
         alert(M.str.filter_recitcahiercanada.msgSuccess);
     }
 }
