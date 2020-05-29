@@ -27,5 +27,5 @@ $plugin->dependencies = [
     'local_recitcommon' => 2020052700, // ANY_VERSION
 	'mod_recitcahiercanada' => 2020052700
 ];
-$plugin->release = 'R8-2020052700'; 
+$plugin->release = 'R8-V1.8'; 
 $plugin->maturity = MATURITY_BETA; // MATURITY_ALPHA, MATURITY_BETA, MATURITY_RC or MATURITY_STABLE
