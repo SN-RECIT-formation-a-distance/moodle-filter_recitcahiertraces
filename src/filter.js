@@ -27,7 +27,7 @@ recit.filter.cahiercanada.Main = class
 {
     constructor(){       
         this.onSave = this.onSave.bind(this);
-        this.onSaveAuto = this.onSaveAuto.bind(this);
+        //this.onSaveAuto = this.onSaveAuto.bind(this);
         this.onReset = this.onReset.bind(this);
         this.onCallback = this.onCallback.bind(this);
         this.init = this.init.bind(this);
@@ -46,21 +46,22 @@ recit.filter.cahiercanada.Main = class
             this.inputList[name].ccCmId = item.getAttribute('data-pn-cccmid');
             this.inputList[name].userId = item.getAttribute('data-pn-userid');
             this.inputList[name].courseId = item.getAttribute('data-pn-courseid');
-            this.inputList[name].editor = new recit.components.EditorDecorator(`${name}Container`);
-            this.inputList[name].editor.onFocusOutCallback = () => this.onSaveAuto(name);
+            this.inputList[name].view = this.inputList[name].dom.querySelector(`[id="${name}_view"]`);
+            this.inputList[name].loading = this.inputList[name].dom.querySelector(`[id="${name}_loading"]`);
+            this.inputList[name].editor = new recit.components.EditorDecorator(`${name}_container`);
+            this.inputList[name].feedback = this.inputList[name].dom.querySelector(`[id="${name}_feedback"]`);
         }
     }
-    
-    onSaveAuto(name){
-        if(window.confirm(M.str.filter_recitcahiercanada.msgSaveAuto)){
-            this.onSave(name);
-        }
+
+    onCancel(name){
+        this.inputList[name].editor.setValue(this.inputList[name].view.innerHTML);
     }
 
     onSave(name){
         let input = this.inputList[name];
 		let data = {personalNoteId: 0, ccCmId: input.ccCmId, userId: input.userId, note: input.editor.getValue(), courseId: input.courseId };		
         recit.http.WebApi.instance().saveStudentNote(data, (result) => this.onCallback(result));
+        input.loading.style.display = 'block';
     }
 
     onReset(name){
@@ -69,6 +70,7 @@ recit.filter.cahiercanada.Main = class
         
         if(window.confirm(M.str.filter_recitcahiercanada.msgConfirmReset)){
             recit.http.WebApi.instance().saveStudentNote(data, (result) => this.onCallback(result));
+            input.loading.style.display = 'block';
         }
     }
 
@@ -83,10 +85,13 @@ recit.filter.cahiercanada.Main = class
             // get all the common editors (same ccCmId)
             if(attr.indexOf(`cccmid${result.data.ccCmId}`) >= 0){
                 this.inputList[attr].editor.setValue(result.data.note.text);
-                let feedbackList = this.inputList[attr].dom.querySelectorAll(`[id="ctFeedback${this.inputList[attr].ccCmId}"]`);	
-                for(let feedback of feedbackList){
-                    feedback.style.display = (result.data.isTemplate === 1 ? 'none' : 'block');
+                this.inputList[attr].view.innerHTML = result.data.note.text;
+                
+                if(this.inputList[attr].feedback !== null){
+                    this.inputList[attr].feedback.style.display = (result.data.isTemplate === 1 ? 'none' : 'block');
                 }
+                
+                this.inputList[attr].loading.style.display = 'none';
             }
         }
 
