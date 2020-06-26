@@ -102,6 +102,7 @@ class filter_recitcahiercanada extends moodle_text_filter {
                     if(!isset($json->color)){ $json->color = 'inherit'; }
                     if(!isset($json->btnSaveVariant)){ $json->btnSaveVariant = 'btn-primary'; }
                     if(!isset($json->btnResetVariant)){ $json->btnResetVariant = 'btn-secondary'; }
+                    if(!isset($json->inputOption)){ $json->inputOption = '1'; }
 
                     $replace = $this->getPersonalNoteForm($obj, $USER->id, $json);
                     $text = $this->str_replace_first($match[0], $replace, $text);
@@ -112,7 +113,17 @@ class filter_recitcahiercanada extends moodle_text_filter {
 		return $text;
 	}
 
+    
 	public function getPersonalNoteForm($dbData, $userId, $intCode){	
+        switch($intCode->inputOption){
+            case '1':
+                return $this->getPersonalNoteFormEmbedded($dbData, $userId, $intCode);
+            case '2':
+                return $this->getPersonalNoteFormPopup($dbData, $userId, $intCode);
+        }
+    }	
+    
+    protected function getPersonalNoteFormEmbedded($dbData, $userId, $intCode){
         global $CFG;
 
         $this->nbEditorAtto++;
@@ -120,21 +131,14 @@ class filter_recitcahiercanada extends moodle_text_filter {
 
         $context = context_course::instance($dbData->courseId);
         
-       /* $this->nbEditorAtto++;
-
-		//global $COURSE;
-		$name = sprintf( "cccmid%satto%s", $dbData->ccCmId, $this->nbEditorAtto);
-
-		$context = context_course::instance($dbData->courseId);
-
 		$result = "<div style='padding: 1rem;' data-pn-name='$name' data-pn-cccmid='$dbData->ccCmId' data-pn-userid='$userId' data-pn-courseid='$dbData->courseId'>";	
 		$result .= sprintf("<label style='font-weight: 500; font-size: 20px; color: {$intCode->color}' class='recitcahierlabel'>%s</label>", $dbData->noteTitle);
-		$result .= Utils::createEditorHtml(true, "{$name}Container", $name, $dbData->note->text, $intCode->nbLines, $context, $dbData->note->itemid);
+		$result .= Utils::createEditorHtml(true, "{$name}_container", $name, $dbData->note->text, $intCode->nbLines, $context, $dbData->note->itemid);
 		$result .= "<br/>";
 
 		if(strlen($dbData->teacherTip) > 0){
             $display = ($dbData->isTemplate == 1 ? 'none' : 'block');
-            $result .= sprintf("<div id='ctFeedback{$dbData->ccCmId}' style='display: $display;' class='alert alert-warning' role='alert'> <strong>%s</strong><br/>%s</div>", 
+            $result .= sprintf("<div id='{$name}_feedback' style='display: $display;' class='alert alert-warning' role='alert'> <strong>%s</strong><br/>%s</div>", 
                                 get_string('teacherTip', "filter_recitcahiercanada"), $dbData->teacherTip);
 			$result .= "<br/>";	
 		}
@@ -146,9 +150,24 @@ class filter_recitcahiercanada extends moodle_text_filter {
                         $name, get_string('save', "filter_recitcahiercanada"));
         $result .= '</div>';
 
+        $result .= "<div id='{$name}_loading' class='recit-loading'>";
+        $result .= "<i class='fa fa-spinner fa-pulse fa-3x fa-fw'></i>";
+        $result .= "<span class='sr-only'>Loading...</span>";
+        $result .= "</div>";
+
         $result .= "</div>";		
         		
-        return $result;	*/
+        return $result;
+    }
+
+    protected function getPersonalNoteFormPopup($dbData, $userId, $intCode){
+        global $CFG;
+
+        $this->nbEditorAtto++;
+        $name = sprintf( "cccmid%satto%s", $dbData->ccCmId, $this->nbEditorAtto);
+
+        $context = context_course::instance($dbData->courseId);
+
         $result = "<div class='card' style='margin: 3rem;'  data-pn-name='$name' data-pn-cccmid='$dbData->ccCmId' data-pn-userid='$userId' data-pn-courseid='$dbData->courseId'>";
         $result .= "<div class='card-header' style='color: #373a3c;'><strong>{$dbData->noteTitle}</strong><span class='pull-right text-muted p-2'>Cahier de traces <img src='$CFG->wwwroot/filter/recitcahiercanada/pix/icon.png' alt='RÉCIT' width='20px' height='20px'/></span></div>";
         $result .= "<div class='card-body' style='min-height: 150px;' id='{$name}_view'>";
@@ -195,8 +214,7 @@ class filter_recitcahiercanada extends moodle_text_filter {
 
         $result .= $modal;
 
-        $result .= "<div id='{$name}_loading' style='display: none; font-size: 40px; position: fixed; top: 50%; left: 50%; 
-                    transform: translate(-50%, -50%); transform: -webkit-translate(-50%, -50%); transform: -moz-translate(-50%, -50%); transform: -ms-translate(-50%, -50%);'>";
+        $result .= "<div id='{$name}_loading' class='recit-loading'>";
         $result .= "<i class='fa fa-spinner fa-pulse fa-3x fa-fw'></i>";
         $result .= "<span class='sr-only'>Loading...</span>";
         $result .= "</div>";
@@ -204,5 +222,5 @@ class filter_recitcahiercanada extends moodle_text_filter {
         $result .= "</div>";
 
         return $result;	
-	}	
+    }
 }

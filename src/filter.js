@@ -46,7 +46,7 @@ recit.filter.cahiercanada.Main = class
             this.inputList[name].ccCmId = item.getAttribute('data-pn-cccmid');
             this.inputList[name].userId = item.getAttribute('data-pn-userid');
             this.inputList[name].courseId = item.getAttribute('data-pn-courseid');
-            this.inputList[name].view = this.inputList[name].dom.querySelector(`[id="${name}_view"]`);
+            this.inputList[name].view = this.inputList[name].dom.querySelector(`[id="${name}_view"]`) || null;
             this.inputList[name].loading = this.inputList[name].dom.querySelector(`[id="${name}_loading"]`);
             this.inputList[name].editor = new recit.components.EditorDecorator(`${name}_container`);
             this.inputList[name].feedback = this.inputList[name].dom.querySelector(`[id="${name}_feedback"]`);
@@ -85,7 +85,10 @@ recit.filter.cahiercanada.Main = class
             // get all the common editors (same ccCmId)
             if(attr.indexOf(`cccmid${result.data.ccCmId}`) >= 0){
                 this.inputList[attr].editor.setValue(result.data.note.text);
-                this.inputList[attr].view.innerHTML = result.data.note.text;
+
+                if(this.inputList[attr].view !== null){
+                    this.inputList[attr].view.innerHTML = result.data.note.text;
+                }
                 
                 if(this.inputList[attr].feedback !== null){
                     this.inputList[attr].feedback.style.display = (result.data.isTemplate === 1 ? 'none' : 'block');

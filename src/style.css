@@ -1,0 +1,3 @@
+.recit-loading{display: none; font-size: 40px; position: fixed; top: 50%; left: 50%; z-index: 1000;
+    transform: translate(-50%, -50%); transform: -webkit-translate(-50%, -50%); transform: -moz-translate(-50%, -50%); transform: -ms-translate(-50%, -50%);
+}
