@@ -150,7 +150,8 @@ class filter_recitcahiercanada extends moodle_text_filter {
                         $name, get_string('save', "filter_recitcahiercanada"));
         $result .= '</div>';
 
-        $result .= "<div id='{$name}_loading' class='recit-loading'>";
+        $result .= "<div id='{$name}_loading' style='display: none; font-size: 40px; position: fixed; top: 50%; left: 50%; z-index: 1000; color: #efefef;
+        transform: translate(50%, -50%); transform: -webkit-translate(50%, -50%); transform: -moz-translate(50%, -50%); transform: -ms-translate(50%, -50%);'>";
         $result .= "<i class='fa fa-spinner fa-pulse fa-3x fa-fw'></i>";
         $result .= "<span class='sr-only'>Loading...</span>";
         $result .= "</div>";
