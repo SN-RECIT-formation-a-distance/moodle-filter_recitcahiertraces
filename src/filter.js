@@ -15,7 +15,7 @@
 
 /**
  * @package   filter_recitcahiercanada
- * @copyright 2019 RÉCIT 
+ * @copyright 2019 RÃ‰CIT 
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
  
