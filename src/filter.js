@@ -51,6 +51,16 @@ recit.filter.cahiercanada.Main = class
             this.inputList[name].editor = new recit.components.EditorDecorator(`${name}_container`);
             this.inputList[name].feedback = this.inputList[name].dom.querySelector(`[id="${name}_feedback"]`);
         }
+
+        this.createCssClasses();
+    }
+
+    createCssClasses(){
+        let style = document.createElement('style');
+        style.type = 'text/css';
+        style.innerHTML = `.recit-loading { display: none; font-size: 40px; position: fixed; top: 50%; left: 50%; z-index: 2000; 
+                            transform: translate(-50%, -50%); transform: -webkit-translate(-50%, -50%); transform: -moz-translate(-50%, -50%); transform: -ms-translate(-50%, -50%); }`;
+        document.getElementsByTagName('head')[0].appendChild(style);
     }
 
     onCancel(name){

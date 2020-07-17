@@ -25,14 +25,41 @@ require_once($CFG->dirroot . "/local/recitcommon/php/Utils.php");
 class filter_recitcahiercanada extends moodle_text_filter {
     
     protected $nbEditorAtto = 0;
+    protected $editorOption = "1"; // 1 = atto, 2 = recit editor
+
+     /**
+     * Set any context-specific configuration for this filter.
+     *
+     * @param context $context The current context.
+     * @param array $localconfig Any context-specific configuration for this filter.
+     */
+    public function __construct($context, array $localconfig) {
+        global $PAGE, $CFG;
+
+        parent::__construct($context, $localconfig);
+
+        if($context instanceof context_course){
+            // the CSS needs to be loaded here because on the function setup it is too late
+            $cssRecitEditor = $CFG->wwwroot .'/local/recitcommon/js/recit_rich_editor/index.css';
+            if(file_exists($cssRecitEditor)){
+                $PAGE->requires->css(new moodle_url($cssRecitEditor));
+            }
+        }
+    }
 
 	public function setup($page, $context) {
 		global $CFG, $OUTPUT;
-		
+
+        $this->editorOption = get_config('filter_recitcahiercanada', 'editorOption');
+
 		$page->requires->js(new moodle_url($CFG->wwwroot . '/local/recitcommon/js/RecitApi.js'), true);
 		$page->requires->js(new moodle_url($CFG->wwwroot . '/local/recitcommon/js/Components.js'), true);
-		$page->requires->js(new moodle_url($CFG->wwwroot . '/local/recitcommon/js/Utils.js'), true);
-        $page->requires->js(new moodle_url($CFG->wwwroot .'/filter/recitcahiercanada/filter.js'), true);
+        $page->requires->js(new moodle_url($CFG->wwwroot . '/local/recitcommon/js/Utils.js'), true);
+        $page->requires->js(new moodle_url($CFG->wwwroot .'/filter/recitcahiercanada/filter.js'), true);        
+
+        if($this->editorOption == "2"){
+            $page->requires->js(new moodle_url($CFG->wwwroot .'/local/recitcommon/js/recit_rich_editor/index.js'), true);
+        }
 
         $page->requires->string_for_js('msgSuccess', 'filter_recitcahiercanada');
         $page->requires->string_for_js('msgConfirmReset', 'filter_recitcahiercanada');
@@ -112,7 +139,6 @@ class filter_recitcahiercanada extends moodle_text_filter {
 
 		return $text;
 	}
-
     
 	public function getPersonalNoteForm($dbData, $userId, $intCode){	
         switch($intCode->inputOption){
@@ -123,6 +149,15 @@ class filter_recitcahiercanada extends moodle_text_filter {
         }
     }	
     
+    protected function getEditorOption($name, $dbData, $intCode){
+        if($this->editorOption == "2"){
+            return "<div id='{$name}_container' data-recit-rich-editor='placeholder' data-format='recit_rich_editor'>{$dbData->note->text}</div>";
+        }
+        else{
+            return Utils::createEditorHtml(true, "{$name}_container", $name, $dbData->note->text, $intCode->nbLines, $context, $dbData->note->itemid);
+        }
+    }
+
     protected function getPersonalNoteFormEmbedded($dbData, $userId, $intCode){
         global $CFG;
 
@@ -133,7 +168,9 @@ class filter_recitcahiercanada extends moodle_text_filter {
         
 		$result = "<div style='padding: 1rem;' data-pn-name='$name' data-pn-cccmid='$dbData->ccCmId' data-pn-userid='$userId' data-pn-courseid='$dbData->courseId'>";	
 		$result .= sprintf("<label style='font-weight: 500; font-size: 20px; color: {$intCode->color}' class='recitcahierlabel'>%s</label>", $dbData->noteTitle);
-		$result .= Utils::createEditorHtml(true, "{$name}_container", $name, $dbData->note->text, $intCode->nbLines, $context, $dbData->note->itemid);
+        
+        $result .= $this->getEditorOption($name, $dbData, $intCode);
+        
 		$result .= "<br/>";
 
 		if(strlen($dbData->teacherTip) > 0){
@@ -150,8 +187,7 @@ class filter_recitcahiercanada extends moodle_text_filter {
                         $name, get_string('save', "filter_recitcahiercanada"));
         $result .= '</div>';
 
-        $result .= "<div id='{$name}_loading' style='display: none; font-size: 40px; position: fixed; top: 50%; left: 50%; z-index: 1000; color: #efefef;
-        transform: translate(50%, -50%); transform: -webkit-translate(50%, -50%); transform: -moz-translate(50%, -50%); transform: -ms-translate(50%, -50%);'>";
+        $result .= "<div id='{$name}_loading' class='recit-loading' style='display:none;'>";
         $result .= "<i class='fa fa-spinner fa-pulse fa-3x fa-fw'></i>";
         $result .= "<span class='sr-only'>Loading...</span>";
         $result .= "</div>";
@@ -202,7 +238,7 @@ class filter_recitcahiercanada extends moodle_text_filter {
                         $modal .= sprintf("<button type='button' class='close' data-dismiss='modal' aria-label='Close' onclick='recitFilterCahierCanada.onCancel(\"%s\")'><span aria-hidden='true'>&times;</span></button>", $name);
                     $modal .= '</div>';
                     $modal .= '<div class="modal-body">';                        
-                    $modal .= Utils::createEditorHtml(true, "{$name}_container", $name, $dbData->note->text, $intCode->nbLines, $context, $dbData->note->itemid);
+                    $modal .= $this->getEditorOption($name, $dbData, $intCode);
                     $modal .= '</div>';
 
                     $modal .= '<div class="modal-footer">';
@@ -215,7 +251,7 @@ class filter_recitcahiercanada extends moodle_text_filter {
 
         $result .= $modal;
 
-        $result .= "<div id='{$name}_loading' class='recit-loading'>";
+        $result .= "<div id='{$name}_loading' class='recit-loading' style='display:none;'>";
         $result .= "<i class='fa fa-spinner fa-pulse fa-3x fa-fw'></i>";
         $result .= "<span class='sr-only'>Loading...</span>";
         $result .= "</div>";
