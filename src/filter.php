@@ -42,7 +42,7 @@ class filter_recitcahiercanada extends moodle_text_filter {
             // the CSS needs to be loaded here because on the function setup it is too late
             $cssRecitEditor = $CFG->wwwroot .'/local/recitcommon/js/recit_rich_editor/index.css';
             if(file_exists($cssRecitEditor)){
-                $PAGE->requires->css(new moodle_url($cssRecitEditor));
+                $PAGE->requires->css(new moodle_url($cssRecitEditor), true);
             }
         }
     }
@@ -151,7 +151,7 @@ class filter_recitcahiercanada extends moodle_text_filter {
     
     protected function getEditorOption($name, $dbData, $intCode){
         if($this->editorOption == "2"){
-            return "<div id='{$name}_container' data-recit-rich-editor='placeholder' data-format='recit_rich_editor'>{$dbData->note->text}</div>";
+            return "<div id='{$name}_container' data-format='recit_rich_editor'>{$dbData->note->text}</div>";
         }
         else{
             return Utils::createEditorHtml(true, "{$name}_container", $name, $dbData->note->text, $intCode->nbLines, $context, $dbData->note->itemid);
