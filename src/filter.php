@@ -40,7 +40,7 @@ class filter_recitcahiercanada extends moodle_text_filter {
 
         if($context instanceof context_course){
             // the CSS needs to be loaded here because on the function setup it is too late
-            $cssRecitEditor = $CFG->wwwroot .'/local/recitcommon/js/recit_rich_editor/index.css';
+            $cssRecitEditor = $CFG->wwwroot .'/local/recitcommon/js/recit_rich_editor/build/index.css';
             if(file_exists($cssRecitEditor)){
                 $PAGE->requires->css(new moodle_url($cssRecitEditor), true);
             }
@@ -58,7 +58,7 @@ class filter_recitcahiercanada extends moodle_text_filter {
         $page->requires->js(new moodle_url($CFG->wwwroot .'/filter/recitcahiercanada/filter.js'), true);        
 
         if($this->editorOption == "2"){
-            $page->requires->js(new moodle_url($CFG->wwwroot .'/local/recitcommon/js/recit_rich_editor/index.js'), true);
+            $page->requires->js(new moodle_url($CFG->wwwroot .'/local/recitcommon/js/recit_rich_editor/build/index.js'), true);
         }
 
         $page->requires->string_for_js('msgSuccess', 'filter_recitcahiercanada');
