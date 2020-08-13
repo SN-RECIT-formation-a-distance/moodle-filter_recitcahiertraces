@@ -154,6 +154,7 @@ class filter_recitcahiercanada extends moodle_text_filter {
             return "<div id='{$name}_container' data-format='recit_rich_editor'>{$dbData->note->text}</div>";
         }
         else{
+            $context = context_course::instance($dbData->courseId);
             return Utils::createEditorHtml(true, "{$name}_container", $name, $dbData->note->text, $intCode->nbLines, $context, $dbData->note->itemid);
         }
     }
@@ -163,9 +164,7 @@ class filter_recitcahiercanada extends moodle_text_filter {
 
         $this->nbEditorAtto++;
         $name = sprintf( "cccmid%satto%s", $dbData->ccCmId, $this->nbEditorAtto);
-
-        $context = context_course::instance($dbData->courseId);
-        
+       
 		$result = "<div style='padding: 1rem;' data-pn-name='$name' data-pn-cccmid='$dbData->ccCmId' data-pn-userid='$userId' data-pn-courseid='$dbData->courseId'>";	
 		$result .= sprintf("<label style='font-weight: 500; font-size: 20px; color: {$intCode->color}' class='recitcahierlabel'>%s</label>", $dbData->noteTitle);
         
@@ -202,8 +201,6 @@ class filter_recitcahiercanada extends moodle_text_filter {
 
         $this->nbEditorAtto++;
         $name = sprintf( "cccmid%satto%s", $dbData->ccCmId, $this->nbEditorAtto);
-
-        $context = context_course::instance($dbData->courseId);
 
         $result = "<div class='card' style='margin: 3rem;'  data-pn-name='$name' data-pn-cccmid='$dbData->ccCmId' data-pn-userid='$userId' data-pn-courseid='$dbData->courseId'>";
         $result .= "<div class='card-header' style='color: #373a3c;'><strong>{$dbData->noteTitle}</strong><span class='pull-right text-muted p-2'>Cahier de traces <img src='$CFG->wwwroot/filter/recitcahiercanada/pix/icon.png' alt='RÉCIT' width='20px' height='20px'/></span></div>";
