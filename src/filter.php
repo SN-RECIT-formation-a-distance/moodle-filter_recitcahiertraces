@@ -126,7 +126,7 @@ class filter_recitcahiercanada extends moodle_text_filter {
 				// if $obj is null then the note does not exist
 				if($obj != null){
 					if(!isset($json->nbLines)){ $json->nbLines = 15; }
-                    if(!isset($json->color)){ $json->color = 'inherit'; }
+                    if(!isset($json->color)){ $json->color = ''; }
                     if(!isset($json->btnSaveVariant)){ $json->btnSaveVariant = 'btn-primary'; }
                     if(!isset($json->btnResetVariant)){ $json->btnResetVariant = 'btn-secondary'; }
                     if(!isset($json->inputOption)){ $json->inputOption = '1'; }
@@ -165,9 +165,15 @@ class filter_recitcahiercanada extends moodle_text_filter {
         $this->nbEditorAtto++;
         $name = sprintf( "cccmid%satto%s", $dbData->ccCmId, $this->nbEditorAtto);
        
-		$result = "<div style='padding: 1rem;' data-pn-name='$name' data-pn-cccmid='$dbData->ccCmId' data-pn-userid='$userId' data-pn-courseid='$dbData->courseId'>";	
-		$result .= sprintf("<label style='font-weight: 500; font-size: 20px; color: {$intCode->color}' class='recitcahierlabel'>%s</label>", $dbData->noteTitle);
-        
+        $result = "<div class='personal-note-embedded' data-pn-name='$name' data-pn-cccmid='$dbData->ccCmId' data-pn-userid='$userId' data-pn-courseid='$dbData->courseId'>";	
+        $result .= "<div style='display: flex; justify-content: space-between;'>";
+        $result .= sprintf("<label class='title' style='%s'>%s</label>", (!empty($intCode->color) ? "color: {$intCode->color}" : ""), $dbData->noteTitle);
+        $result .= "<span>";
+        $result .= "<a href='{$CFG->wwwroot}/mod/recitcahiercanada/view.php?id={$dbData->mcmId}' class='btn btn-link btn-sm' target='_blank'><i class='fa fa-book-reader'></i> Voir mes notes</a>";
+//        $result .= "<span class='text-muted p-2'>Cahier de traces <img src='$CFG->wwwroot/filter/recitcahiercanada/pix/icon.png' alt='RÉCIT' width='20px' height='20px'/></span>";
+        $result .= "</span>";
+        $result .= "</div>";
+
         $result .= $this->getEditorOption($name, $dbData, $intCode);
         
 		$result .= "<br/>";
@@ -224,7 +230,7 @@ class filter_recitcahiercanada extends moodle_text_filter {
         $result .= sprintf("<button class='btn btn-secondary btn-sm' onclick='recitFilterCahierCanada.onReset(\"%s\")'><i class='fa fa-times-circle'></i> %s</button>", $name, get_string('reset', "filter_recitcahiercanada"));
         $result .= sprintf("<button class='btn btn-primary btn-sm' data-toggle='modal' data-target='#{$name}_modal'><i class='fa fa-edit'></i> %s</button>", get_string('modify', "filter_recitcahiercanada"));
         $result .= "</div>";
-        $result .= "<a href='{$CFG->wwwroot}/mod/recitcahiercanada/view.php?id={$dbData->mcmId}' class='btn btn-link btn-sm pull-right' target='_blank'><i class='fa fa-pencil'></i>Voir mes notes</a>";
+        $result .= "<a href='{$CFG->wwwroot}/mod/recitcahiercanada/view.php?id={$dbData->mcmId}' class='btn btn-link btn-sm pull-right' target='_blank'><i class='fa fa-book-reader'></i> Voir mes notes</a>";
         $result .= "</div>";        
 
         $modal = "<div class='modal fade' id='{$name}_modal' tabindex='-1' role='dialog' aria-labelledby='modal' aria-hidden='true' data-backdrop='static'>";
