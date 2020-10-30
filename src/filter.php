@@ -127,7 +127,7 @@ class filter_recitcahiercanada extends moodle_text_filter {
 				if($obj != null){
 					if(!isset($json->nbLines)){ $json->nbLines = 15; }
                     if(!isset($json->color)){ $json->color = ''; }
-                    if(!isset($json->btnSaveVariant)){ $json->btnSaveVariant = 'btn-primary'; }
+                    if(!isset($json->btnSaveVariant)){ $json->btnSaveVariant = 'btn-success'; }
                     if(!isset($json->btnResetVariant)){ $json->btnResetVariant = 'btn-secondary'; }
                     if(!isset($json->inputOption)){ $json->inputOption = '1'; }
 
@@ -169,27 +169,32 @@ class filter_recitcahiercanada extends moodle_text_filter {
         $result .= "<div style='display: flex; justify-content: space-between;'>";
         $result .= sprintf("<label class='title' style='%s'>%s</label>", (!empty($intCode->color) ? "color: {$intCode->color}" : ""), $dbData->noteTitle);
         $result .= "<span>";
-        $result .= "<a href='{$CFG->wwwroot}/mod/recitcahiercanada/view.php?id={$dbData->mcmId}' class='btn btn-link btn-sm' target='_blank'><i class='fa fa-book-reader'></i> Voir mes notes</a>";
 //        $result .= "<span class='text-muted p-2'>Cahier de traces <img src='$CFG->wwwroot/filter/recitcahiercanada/pix/icon.png' alt='RÉCIT' width='20px' height='20px'/></span>";
         $result .= "</span>";
         $result .= "</div>";
 
         $result .= $this->getEditorOption($name, $dbData, $intCode);
         
-		$result .= "<br/>";
-
 		if(strlen($dbData->teacherTip) > 0){
             $display = ($dbData->isTemplate == 1 ? 'none' : 'block');
-            $result .= sprintf("<div id='{$name}_feedback' style='display: $display;' class='alert alert-warning' role='alert'> <strong>%s</strong><br/>%s</div>", 
+            $result .= sprintf("<div id='{$name}_feedback' style='display: $display; margin-top: 1rem;' class='alert alert-warning' role='alert'> <strong>%s</strong><br/>%s</div>", 
                                 get_string('teacherTip', "filter_recitcahiercanada"), $dbData->teacherTip);
-			$result .= "<br/>";	
 		}
         
-        $result .= "<div class='btn-group' style='display: flex; justify-content: center'>";
-        $result .= sprintf("<button class='btn $intCode->btnResetVariant' onclick='recitFilterCahierCanada.onReset(\"%s\")'>%s</button>", 
-						$name, get_string('reset', "filter_recitcahiercanada"));
-		$result .= sprintf("<button class='btn $intCode->btnSaveVariant' onclick='recitFilterCahierCanada.onSave(\"%s\")'>%s</button>", 
-                        $name, get_string('save', "filter_recitcahiercanada"));
+        $result .= "<div class='btn-toolbar' style='justify-content: space-between; margin: 1rem 0 1rem 0;'>";
+    
+        $result .= "<div class='btn-group'>";
+        $result .= sprintf("<a href='{$CFG->wwwroot}/mod/recitcahiercanada/view.php?id={$dbData->mcmId}' class='btn btn-primary action' target='_blank' title='%s'><i class='fa fa-book-reader'></i> %s</a>",
+                        get_string('seeMyNotes', "filter_recitcahiercanada"), get_string('seeMyNotes', "filter_recitcahiercanada"));
+        $result .= "</div>";
+
+        $result .= "<div class='btn-group'>";
+        $result .= sprintf("<button class='btn $intCode->btnResetVariant action' onclick='recitFilterCahierCanada.onReset(\"%s\")' title='%s'><i class='fa fa-times-circle'></i> %s</button>", 
+						$name, get_string('reset', "filter_recitcahiercanada"), get_string('reset', "filter_recitcahiercanada"));
+		$result .= sprintf("<button class='btn $intCode->btnSaveVariant action' onclick='recitFilterCahierCanada.onSave(\"%s\")' title='%s'><i class='fa fa-save'></i> %s</button>", 
+                        $name, get_string('save', "filter_recitcahiercanada"), get_string('save', "filter_recitcahiercanada"));
+        $result .= "</div>";
+
         $result .= '</div>';
 
         $result .= "<div id='{$name}_loading' class='recit-loading' style='display:none;'>";

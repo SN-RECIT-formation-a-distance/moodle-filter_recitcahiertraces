@@ -14,4 +14,5 @@ $string['editor_option'] = "Choose the type of editor to be displayed for enteri
 $string['editor_option_desc'] = "The existing options are Atto Editor (default Moodle) and RÉCIT Editor (alpha version)";
 $string['atto_editor'] = "Atto Editor";
 $string['recit_editor'] = "RÉCIT Editor";
+$string['seeMyNotes'] = "See my notes";
 //$string['msgSaveAuto'] = "The note is not saved yet. Do you want to proceed and save the note?";

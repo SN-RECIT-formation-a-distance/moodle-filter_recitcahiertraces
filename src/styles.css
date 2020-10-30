@@ -1,2 +1,6 @@
-.personal-note-embedded{padding: 1rem;}
 .personal-note-embedded .title{font-weight: 500; font-size: 20px;}
+
+@media screen and (max-width: 767px){
+    .personal-note-embedded .btn-group .btn{font-size: 0; }
+    .personal-note-embedded .btn-group i{font-size: initial;} 
+}

@@ -14,4 +14,5 @@ $string['editor_option'] = "Choisissez le type d'éditeur à afficher pour saisi
 $string['editor_option_desc'] = "Les options existantes sont Atto Editor (par défaut Moodle) et RÉCIT Editor (version alpha)";
 $string['atto_editor'] = "Éditeur Atto";
 $string['recit_editor'] = "Éditeur RÉCIT";
+$string['seeMyNotes'] = "Voir mes notes";
 //$string['msgSaveAuto'] = "La note n'est pas encore enregistrée. Voulez-vous continuer et enregistrer la note?";
