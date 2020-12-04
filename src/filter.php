@@ -184,7 +184,7 @@ class filter_recitcahiercanada extends moodle_text_filter {
         $result .= "<div class='btn-toolbar' style='justify-content: space-between; margin: 1rem 0 1rem 0;'>";
     
         $result .= "<div class='btn-group'>";
-        $result .= sprintf("<a href='{$CFG->wwwroot}/mod/recitcahiercanada/view.php?id={$dbData->mcmId}' class='btn btn-primary action' target='_blank' title='%s'><i class='fa fa-book-reader'></i> %s</a>",
+        $result .= sprintf("<a href='{$CFG->wwwroot}/mod/recitcahiercanada/view.php?id={$dbData->mcmId}' class='btn btn-primary action' target='_blank' title='%s'><i class='fa fa-address-book'></i> %s</a>",
                         get_string('seeMyNotes', "filter_recitcahiercanada"), get_string('seeMyNotes', "filter_recitcahiercanada"));
         $result .= "</div>";
 
