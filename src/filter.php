@@ -19,7 +19,7 @@
  * @copyright 2019 RÉCIT 
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-require_once($CFG->dirroot . "/local/recitcommon/php/PersistCtrlCahierTraces.php");
+require_once($CFG->dirroot . "/mod/recitcahiercanada/classes/PersistCtrlCahierTraces.php");
 require_once($CFG->dirroot . "/local/recitcommon/php/Utils.php");
 
 class filter_recitcahiercanada extends moodle_text_filter {
