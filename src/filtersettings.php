@@ -30,7 +30,9 @@ defined('MOODLE_INTERNAL') || die();
 $settings->add(new admin_setting_configselect('filter_recitcahiercanada/editorOption',
         get_string('editor_option', 'filter_recitcahiercanada'),
         get_string('editor_option_desc', 'filter_recitcahiercanada'), "1", 
-        array('1' => get_string('atto_editor', 'filter_recitcahiercanada'),
-        '2' => get_string('recit_editor', 'filter_recitcahiercanada'))
+        array(
+            '1' => get_string('atto_editor', 'filter_recitcahiercanada')
+        //    '2' => get_string('recit_editor', 'filter_recitcahiercanada')
+        )
     ));
 
