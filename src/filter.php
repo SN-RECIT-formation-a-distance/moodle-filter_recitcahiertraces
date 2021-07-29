@@ -25,7 +25,7 @@ require_once($CFG->dirroot . "/local/recitcommon/php/Utils.php");
 class filter_recitcahiercanada extends moodle_text_filter {
     
     protected $nbEditorAtto = 0;
-    protected $editorOption = "1"; // 1 = atto, 2 = recit editor
+  //  protected $editorOption = "1"; // 1 = atto, 2 = recit editor
 
      /**
      * Set any context-specific configuration for this filter.
@@ -50,16 +50,16 @@ class filter_recitcahiercanada extends moodle_text_filter {
 	public function setup($page, $context) {
 		global $CFG, $OUTPUT;
 
-        $this->editorOption = get_config('filter_recitcahiercanada', 'editorOption');
+       // $this->editorOption = get_config('filter_recitcahiercanada', 'editorOption');
 
 		$page->requires->js(new moodle_url($CFG->wwwroot . '/local/recitcommon/js/RecitApi.js'), true);
 		$page->requires->js(new moodle_url($CFG->wwwroot . '/local/recitcommon/js/Components.js'), true);
         $page->requires->js(new moodle_url($CFG->wwwroot . '/local/recitcommon/js/Utils.js'), true);
         $page->requires->js(new moodle_url($CFG->wwwroot .'/filter/recitcahiercanada/filter.js'), true);        
 
-        if($this->editorOption == "2"){
+     /*   if($this->editorOption == "2"){
             $page->requires->js(new moodle_url($CFG->wwwroot .'/local/recitcommon/js/recit_rich_editor/build/index.js'), true);
-        }
+        }*/
 
         $page->requires->string_for_js('msgSuccess', 'filter_recitcahiercanada');
         $page->requires->string_for_js('msgConfirmReset', 'filter_recitcahiercanada');
@@ -150,13 +150,13 @@ class filter_recitcahiercanada extends moodle_text_filter {
     }	
     
     protected function getEditorOption($name, $dbData, $intCode){
-        if($this->editorOption == "2"){
+       /* if($this->editorOption == "2"){
             return "<div id='{$name}_container' data-format='recit_rich_editor'>{$dbData->note->text}</div>";
         }
-        else{
+        else{*/
             $context = context_course::instance($dbData->courseId);
             return Utils::createEditorHtml(true, "{$name}_container", $name, $dbData->note->text, $intCode->nbLines, $context, $dbData->note->itemid);
-        }
+       // }
     }
 
     protected function getPersonalNoteFormEmbedded($dbData, $userId, $intCode){
