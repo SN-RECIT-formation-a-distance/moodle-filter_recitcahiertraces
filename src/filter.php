@@ -38,13 +38,13 @@ class filter_recitcahiercanada extends moodle_text_filter {
 
         parent::__construct($context, $localconfig);
 
-        if($context instanceof context_course){
+       /* if($context instanceof context_course){
             // the CSS needs to be loaded here because on the function setup it is too late
             $cssRecitEditor = $CFG->wwwroot .'/local/recitcommon/js/recit_rich_editor/build/index.css';
             if(file_exists($cssRecitEditor)){
                 $PAGE->requires->css(new moodle_url($cssRecitEditor), true);
             }
-        }
+        }*/
     }
 
 	public function setup($page, $context) {
