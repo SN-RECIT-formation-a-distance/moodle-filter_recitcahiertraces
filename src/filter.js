@@ -14,16 +14,16 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * @package   filter_recitcahiercanada
+ * @package   filter_recitcahiertraces
  * @copyright 2019 RÉCIT 
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
  
 var recit = recit || {};
 recit.filter = recit.filter || {};
-recit.filter.cahiercanada = recit.filter.cahiercanada || {};
+recit.filter.cahiertraces = recit.filter.cahiertraces || {};
 
-recit.filter.cahiercanada.Main = class
+recit.filter.cahiertraces.Main = class
 {
     constructor(){       
         this.onSave = this.onSave.bind(this);
@@ -43,9 +43,10 @@ recit.filter.cahiercanada.Main = class
             let name = item.getAttribute('data-pn-name');
             this.inputList[name] = {};
             this.inputList[name].dom = item;
-            this.inputList[name].ccCmId = item.getAttribute('data-pn-cccmid');
+            this.inputList[name].nid = item.getAttribute('data-pn-nid');
             this.inputList[name].userId = item.getAttribute('data-pn-userid');
             this.inputList[name].courseId = item.getAttribute('data-pn-courseid');
+            this.inputList[name].cmid = item.getAttribute('data-pn-cmid');
             this.inputList[name].view = this.inputList[name].dom.querySelector(`[id="${name}_view"]`) || null;
             this.inputList[name].loading = this.inputList[name].dom.querySelector(`[id="${name}_loading"]`);
             this.inputList[name].editor = new recit.components.EditorDecorator(`${name}_container`);
@@ -69,16 +70,16 @@ recit.filter.cahiercanada.Main = class
 
     onSave(name){
         let input = this.inputList[name];
-		let data = {personalNoteId: 0, ccCmId: input.ccCmId, userId: input.userId, note: input.editor.getValue(), courseId: input.courseId };		
+		let data = {personalNoteId: 0, nid: input.nid, userId: input.userId, note: input.editor.getValue(), courseId: input.courseId, cmId: input.cmid };
         recit.http.WebApi.instance().saveStudentNote(data, (result) => this.onCallback(result));
         input.loading.style.display = 'block';
     }
 
     onReset(name){
         let input = this.inputList[name];
-        let data = {personalNoteId: 0, ccCmId: input.ccCmId, userId: input.userId, note: {text: "", itemid: 0}, courseId: input.courseId };		
+        let data = {personalNoteId: 0, nid: input.nid, userId: input.userId, note: {text: "", itemid: 0}, courseId: input.courseId, cmId: input.cmid };		
         
-        if(window.confirm(M.str.filter_recitcahiercanada.msgConfirmReset)){
+        if(window.confirm(M.str.filter_recitcahiertraces.msgConfirmReset)){
             recit.http.WebApi.instance().saveStudentNote(data, (result) => this.onCallback(result));
             input.loading.style.display = 'block';
         }
@@ -92,8 +93,8 @@ recit.filter.cahiercanada.Main = class
 
         // refresh the many instances of the integration code
         for(let attr in this.inputList){
-            // get all the common editors (same ccCmId)
-            if(attr.indexOf(`cccmid${result.data.ccCmId}`) >= 0){
+            // get all the common editors (same note)
+            if(attr.indexOf(`nid${result.data.nid}`) >= 0){
                 this.inputList[attr].editor.setValue(result.data.note.text);
 
                 if(this.inputList[attr].view !== null){
@@ -108,12 +109,12 @@ recit.filter.cahiercanada.Main = class
             }
         }
 
-        alert(M.str.filter_recitcahiercanada.msgSuccess);
+        alert(M.str.filter_recitcahiertraces.msgSuccess);
     }
 }
 
-var recitFilterCahierCanada = null;
+var recitFilterCahierTraces = null;
 
 recit.utils.onDocumentReady(function(){
-    recitFilterCahierCanada = new recit.filter.cahiercanada.Main();
+    recitFilterCahierTraces = new recit.filter.cahiertraces.Main();
 });

@@ -15,14 +15,14 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * @package   filter_recitcahiercanada
+ * @package   filter_recitcahiertraces
  * @copyright 2019 RÉCIT 
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-require_once($CFG->dirroot . "/mod/recitcahiercanada/classes/PersistCtrlCahierTraces.php");
+require_once($CFG->dirroot . "/mod/recitcahiertraces/classes/PersistCtrlCahierTraces.php");
 require_once($CFG->dirroot . "/local/recitcommon/php/Utils.php");
 
-class filter_recitcahiercanada extends moodle_text_filter {
+class filter_recitcahiertraces extends moodle_text_filter {
     
     protected $nbEditorAtto = 0;
   //  protected $editorOption = "1"; // 1 = atto, 2 = recit editor
@@ -50,20 +50,20 @@ class filter_recitcahiercanada extends moodle_text_filter {
 	public function setup($page, $context) {
 		global $CFG, $OUTPUT;
 
-       // $this->editorOption = get_config('filter_recitcahiercanada', 'editorOption');
+       // $this->editorOption = get_config('filter_recitcahiertraces', 'editorOption');
 
 		$page->requires->js(new moodle_url($CFG->wwwroot . '/local/recitcommon/js/RecitApi.js'), true);
 		$page->requires->js(new moodle_url($CFG->wwwroot . '/local/recitcommon/js/Components.js'), true);
         $page->requires->js(new moodle_url($CFG->wwwroot . '/local/recitcommon/js/Utils.js'), true);
-        $page->requires->js(new moodle_url($CFG->wwwroot .'/filter/recitcahiercanada/filter.js'), true);        
+        $page->requires->js(new moodle_url($CFG->wwwroot .'/filter/recitcahiertraces/filter.js'), true);        
 
      /*   if($this->editorOption == "2"){
             $page->requires->js(new moodle_url($CFG->wwwroot .'/local/recitcommon/js/recit_rich_editor/build/index.js'), true);
         }*/
 
-        $page->requires->string_for_js('msgSuccess', 'filter_recitcahiercanada');
-        $page->requires->string_for_js('msgConfirmReset', 'filter_recitcahiercanada');
-       // $page->requires->string_for_js('msgSaveAuto', 'filter_recitcahiercanada');
+        $page->requires->string_for_js('msgSuccess', 'filter_recitcahiertraces');
+        $page->requires->string_for_js('msgConfirmReset', 'filter_recitcahiertraces');
+       // $page->requires->string_for_js('msgSaveAuto', 'filter_recitcahiertraces');
 	}		
 
     public function str_replace_first($search, $replace, $subject) {
@@ -98,7 +98,7 @@ class filter_recitcahiercanada extends moodle_text_filter {
 				$obj = null;
 				if(isset($json->intCode)){
                     try{
-                        $obj = CahierTracesPersistCtrl::getInstance($DB)->getPersonalNote(null, $USER->id, $json->intCode, $PAGE->cm->id);					
+                        $obj = CahierTracesPersistCtrl::getInstance($DB)->getPersonalNote(null, $USER->id, $json->intCode);
                     }
                     catch(Exception $ex){
                         return $ex->GetMessage();
@@ -107,20 +107,18 @@ class filter_recitcahiercanada extends moodle_text_filter {
                     if($obj == null){
                         $text = "Erreur: code d'intégration intCode: $json->intCode introuvable.";
                     }
-					$intCode = $json->intCode;
 				}
-				else if(isset($json->cccmid)){
+				else if(isset($json->nid)){
                     try{
-                        $obj = CahierTracesPersistCtrl::getInstance($DB)->getPersonalNote($json->cccmid, $USER->id);
+                        $obj = CahierTracesPersistCtrl::getInstance($DB)->getPersonalNote($json->nid, $USER->id);
                     }
                     catch(Exception $ex){
                         return $ex->GetMessage();
                     } 
                     
                     if($obj == null){
-                        $text = "Erreur: code d'intégration cccmid: $json->cccmid introuvable.";
+                        $text = "Erreur: code d'intégration nid: $json->nid introuvable.";
                     }
-                    $intCode = $json->cccmid;                    
 				}
 
 				// if $obj is null then the note does not exist
@@ -160,16 +158,17 @@ class filter_recitcahiercanada extends moodle_text_filter {
     }
 
     protected function getPersonalNoteFormEmbedded($dbData, $userId, $intCode){
-        global $CFG;
+        global $CFG, $PAGE;
 
         $this->nbEditorAtto++;
-        $name = sprintf( "cccmid%satto%s", $dbData->ccCmId, $this->nbEditorAtto);
+        $cmId = $PAGE->cm->id;
+        $name = sprintf( "nid%satto%s", $dbData->nid, $this->nbEditorAtto);
        
-        $result = "<div class='personal-note-embedded' data-pn-name='$name' data-pn-cccmid='$dbData->ccCmId' data-pn-userid='$userId' data-pn-courseid='$dbData->courseId'>";	
+        $result = "<div class='personal-note-embedded' data-pn-name='$name' data-pn-nid='$dbData->nid' data-pn-userid='$userId' data-pn-courseid='$dbData->courseId' data-pn-cmid='$cmId'>";	
         $result .= "<div style='display: flex; justify-content: space-between;'>";
         $result .= sprintf("<label class='title' style='%s'>%s</label>", (!empty($intCode->color) ? "color: {$intCode->color}" : ""), $dbData->noteTitle);
         $result .= "<span>";
-//        $result .= "<span class='text-muted p-2'>Cahier de traces <img src='$CFG->wwwroot/filter/recitcahiercanada/pix/icon.png' alt='RÉCIT' width='20px' height='20px'/></span>";
+//        $result .= "<span class='text-muted p-2'>Cahier de traces <img src='$CFG->wwwroot/filter/recitcahiertraces/pix/icon.png' alt='RÉCIT' width='20px' height='20px'/></span>";
         $result .= "</span>";
         $result .= "</div>";
 
@@ -178,21 +177,21 @@ class filter_recitcahiercanada extends moodle_text_filter {
 		if(strlen($dbData->teacherTip) > 0){
             $display = ($dbData->isTemplate == 1 ? 'none' : 'block');
             $result .= sprintf("<div id='{$name}_feedback' style='display: $display; margin-top: 1rem;' class='alert alert-warning' role='alert'> <strong>%s</strong><br/>%s</div>", 
-                                get_string('teacherTip', "filter_recitcahiercanada"), $dbData->teacherTip);
+                                get_string('teacherTip', "filter_recitcahiertraces"), $dbData->teacherTip);
 		}
         
         $result .= "<div class='btn-toolbar' style='justify-content: space-between; margin: 1rem 0 1rem 0;'>";
     
         $result .= "<div class='btn-group'>";
-        $result .= sprintf("<a href='{$CFG->wwwroot}/mod/recitcahiercanada/view.php?id={$dbData->mcmId}' class='btn btn-primary action' target='_blank' title='%s'><i class='fa fa-address-book'></i> %s</a>",
-                        get_string('seeMyNotes', "filter_recitcahiercanada"), get_string('seeMyNotes', "filter_recitcahiercanada"));
+        $result .= sprintf("<a href='{$CFG->wwwroot}/mod/recitcahiertraces/view.php?id={$dbData->mcmId}' class='btn btn-primary action' target='_blank' title='%s'><i class='fa fa-address-book'></i> %s</a>",
+                        get_string('seeMyNotes', "filter_recitcahiertraces"), get_string('seeMyNotes', "filter_recitcahiertraces"));
         $result .= "</div>";
 
         $result .= "<div class='btn-group'>";
-        $result .= sprintf("<button class='btn $intCode->btnResetVariant action' onclick='recitFilterCahierCanada.onReset(\"%s\")' title='%s'><i class='fa fa-times-circle'></i> %s</button>", 
-						$name, get_string('reset', "filter_recitcahiercanada"), get_string('reset', "filter_recitcahiercanada"));
-		$result .= sprintf("<button class='btn $intCode->btnSaveVariant action' onclick='recitFilterCahierCanada.onSave(\"%s\")' title='%s'><i class='fa fa-save'></i> %s</button>", 
-                        $name, get_string('save', "filter_recitcahiercanada"), get_string('save', "filter_recitcahiercanada"));
+        $result .= sprintf("<button class='btn $intCode->btnResetVariant action' onclick='recitFilterCahierTraces.onReset(\"%s\")' title='%s'><i class='fa fa-times-circle'></i> %s</button>", 
+						$name, get_string('reset', "filter_recitcahiertraces"), get_string('reset', "filter_recitcahiertraces"));
+		$result .= sprintf("<button class='btn $intCode->btnSaveVariant action' onclick='recitFilterCahierTraces.onSave(\"%s\")' title='%s'><i class='fa fa-save'></i> %s</button>", 
+                        $name, get_string('save', "filter_recitcahiertraces"), get_string('save', "filter_recitcahiertraces"));
         $result .= "</div>";
 
         $result .= '</div>';
@@ -208,13 +207,14 @@ class filter_recitcahiercanada extends moodle_text_filter {
     }
 
     protected function getPersonalNoteFormPopup($dbData, $userId, $intCode){
-        global $CFG;
+        global $CFG, $PAGE;
 
         $this->nbEditorAtto++;
-        $name = sprintf( "cccmid%satto%s", $dbData->ccCmId, $this->nbEditorAtto);
+        $cmId = $PAGE->cm->id;
+        $name = sprintf( "nid%satto%s", $dbData->nid, $this->nbEditorAtto);
 
-        $result = "<div class='card' style='margin: 3rem;'  data-pn-name='$name' data-pn-cccmid='$dbData->ccCmId' data-pn-userid='$userId' data-pn-courseid='$dbData->courseId'>";
-        $result .= "<div class='card-header' style='color: #373a3c;'><strong>{$dbData->noteTitle}</strong><span class='pull-right text-muted p-2'>Cahier de traces <img src='$CFG->wwwroot/filter/recitcahiercanada/pix/icon.png' alt='RÉCIT' width='20px' height='20px'/></span></div>";
+        $result = "<div class='card' style='margin: 3rem;'  data-pn-name='$name' data-pn-nid='$dbData->nid' data-pn-userid='$userId' data-pn-courseid='$dbData->courseId' data-pn-cmid='$cmId'>";
+        $result .= "<div class='card-header' style='color: #373a3c;'><strong>{$dbData->noteTitle}</strong><span class='pull-right text-muted p-2'>Cahier de traces <img src='$CFG->wwwroot/filter/recitcahiertraces/pix/icon.png' alt='RÉCIT' width='20px' height='20px'/></span></div>";
         $result .= "<div class='card-body' style='min-height: 150px;' id='{$name}_view'>";
         //$result .= "<h5 class='card-title'>Note: {$dbData->noteTitle}</h5>";
         //$result .= "<p class='card-text'>{$dbData->note->text}</p>";
@@ -225,17 +225,17 @@ class filter_recitcahiercanada extends moodle_text_filter {
             if(strlen($dbData->teacherTip) > 0){
                 $display = ($dbData->isTemplate == 1 ? 'none' : 'block');
                 $result .= sprintf("<div id='{$name}_feedback' style='display: $display;' class='alert alert-warning' role='alert'> <strong>%s</strong><br/>%s</div>", 
-                                    get_string('teacherTip', "filter_recitcahiercanada"), $dbData->teacherTip);
+                                    get_string('teacherTip', "filter_recitcahiertraces"), $dbData->teacherTip);
             }
         $result .= "</div>";
 
         $result .= "<div class='card-footer'>";
         
         $result .= "<div class='btn-group'>";
-        $result .= sprintf("<button class='btn btn-secondary btn-sm' onclick='recitFilterCahierCanada.onReset(\"%s\")'><i class='fa fa-times-circle'></i> %s</button>", $name, get_string('reset', "filter_recitcahiercanada"));
-        $result .= sprintf("<button class='btn btn-primary btn-sm' data-toggle='modal' data-target='#{$name}_modal'><i class='fa fa-edit'></i> %s</button>", get_string('modify', "filter_recitcahiercanada"));
+        $result .= sprintf("<button class='btn btn-secondary btn-sm' onclick='recitFilterCahierTraces.onReset(\"%s\")'><i class='fa fa-times-circle'></i> %s</button>", $name, get_string('reset', "filter_recitcahiertraces"));
+        $result .= sprintf("<button class='btn btn-primary btn-sm' data-toggle='modal' data-target='#{$name}_modal'><i class='fa fa-edit'></i> %s</button>", get_string('modify', "filter_recitcahiertraces"));
         $result .= "</div>";
-        $result .= "<a href='{$CFG->wwwroot}/mod/recitcahiercanada/view.php?id={$dbData->mcmId}' class='btn btn-link btn-sm pull-right' target='_blank'><i class='fa fa-book-reader'></i> Voir mes notes</a>";
+        $result .= "<a href='{$CFG->wwwroot}/mod/recitcahiertraces/view.php?id={$dbData->mcmId}' class='btn btn-link btn-sm pull-right' target='_blank'><i class='fa fa-book-reader'></i> Voir mes notes</a>";
         $result .= "</div>";        
 
         $modal = "<div class='modal fade' id='{$name}_modal' tabindex='-1' role='dialog' aria-labelledby='modal' aria-hidden='true' data-backdrop='static'>";
@@ -243,15 +243,15 @@ class filter_recitcahiercanada extends moodle_text_filter {
                 $modal .= '<div class="modal-content">';
                     $modal .= '<div class="modal-header">';
                         $modal .= "<h5 class='modal-title'>{$dbData->noteTitle}</h5>";
-                        $modal .= sprintf("<button type='button' class='close' data-dismiss='modal' aria-label='Close' onclick='recitFilterCahierCanada.onCancel(\"%s\")'><span aria-hidden='true'>&times;</span></button>", $name);
+                        $modal .= sprintf("<button type='button' class='close' data-dismiss='modal' aria-label='Close' onclick='recitFilterCahierTraces.onCancel(\"%s\")'><span aria-hidden='true'>&times;</span></button>", $name);
                     $modal .= '</div>';
                     $modal .= '<div class="modal-body">';                        
                     $modal .= $this->getEditorOption($name, $dbData, $intCode);
                     $modal .= '</div>';
 
                     $modal .= '<div class="modal-footer">';
-                        $modal .= sprintf("<button type='button' class='btn btn-secondary' data-dismiss='modal' onclick='recitFilterCahierCanada.onCancel(\"%s\")'>%s</button>", $name, get_string('cancel', "filter_recitcahiercanada"));
-                        $modal .= sprintf("<button type='button' class='btn btn-primary' data-dismiss='modal' onclick='recitFilterCahierCanada.onSave(\"%s\")'>%s</button>", $name, get_string('save', "filter_recitcahiercanada"));
+                        $modal .= sprintf("<button type='button' class='btn btn-secondary' data-dismiss='modal' onclick='recitFilterCahierTraces.onCancel(\"%s\")'>%s</button>", $name, get_string('cancel', "filter_recitcahiertraces"));
+                        $modal .= sprintf("<button type='button' class='btn btn-primary' data-dismiss='modal' onclick='recitFilterCahierTraces.onSave(\"%s\")'>%s</button>", $name, get_string('save', "filter_recitcahiertraces"));
                     $modal .= '</div>';
                 $modal .= '</div>';
             $modal .= '</div>';

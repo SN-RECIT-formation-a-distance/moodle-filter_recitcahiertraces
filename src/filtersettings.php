@@ -19,7 +19,7 @@
 /**
  * This filter must be put before Auto-linking with Manage Filters to work properly.
  *
- * @package    filter_recitcahiercanada
+ * @package    filter_recitcahiertraces
  * @copyright  RECITFAD
  * @author     RECITFAD
  * @license    {@link http://www.gnu.org/licenses/gpl-3.0.html} GNU GPL v3 or later
@@ -27,12 +27,12 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$settings->add(new admin_setting_configselect('filter_recitcahiercanada/editorOption',
-        get_string('editor_option', 'filter_recitcahiercanada'),
-        get_string('editor_option_desc', 'filter_recitcahiercanada'), "1", 
+$settings->add(new admin_setting_configselect('filter_recitcahiertraces/editorOption',
+        get_string('editor_option', 'filter_recitcahiertraces'),
+        get_string('editor_option_desc', 'filter_recitcahiertraces'), "1", 
         array(
-            '1' => get_string('atto_editor', 'filter_recitcahiercanada')
-        //    '2' => get_string('recit_editor', 'filter_recitcahiercanada')
+            '1' => get_string('atto_editor', 'filter_recitcahiertraces')
+        //    '2' => get_string('recit_editor', 'filter_recitcahiertraces')
         )
     ));
 
