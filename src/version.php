@@ -19,13 +19,13 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 defined('MOODLE_INTERNAL') || die();
-$plugin->version   = 2021050400;        // The current plugin version (Date: YYYYMMDDXX)
+$plugin->version   = 2021082000;        // The current plugin version (Date: YYYYMMDDXX)
 $plugin->requires  = 2018050800;        // Requires this Moodle version
 $plugin->component = 'filter_recitcahiercanada'; // Full name of the plugin (used for diagnostics)
 // This is a list of plugins, this plugin depends on (and their versions).                                                          
 $plugin->dependencies = [
-    'local_recitcommon' => 2021050400, // ANY_VERSION
-	'mod_recitcahiercanada' => 2021050400
+    'local_recitcommon' => 2021082000, // ANY_VERSION
+	'mod_recitcahiercanada' => 2021082000
 ];
-$plugin->release = 'R13-V1.13.1'; 
+$plugin->release = 'R14-V1.14.0'; 
 $plugin->maturity = MATURITY_BETA; // MATURITY_ALPHA, MATURITY_BETA, MATURITY_RC or MATURITY_STABLE

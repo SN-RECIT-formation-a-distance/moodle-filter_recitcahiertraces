@@ -23,6 +23,23 @@ var recit = recit || {};
 recit.filter = recit.filter || {};
 recit.filter.cahiercanada = recit.filter.cahiercanada || {};
 
+recit.filter.cahiercanada.WebApi = class
+{
+    constructor(){
+        this.saveStudentNote = this.saveStudentNote.bind(this);
+        this.webApi = new recit.http.WebApi();
+        this.gateway = `${M.cfg.wwwroot}/mod/recitcahiercanada/classes/WebApi.php`;
+    }
+
+    saveStudentNote(data, onSuccess){
+        let options = {};
+        options.service = "savePersonalNote";
+        options.data = data;
+        options.flags = {mode: 's'};
+        this.webApi.post(this.gateway, options, onSuccess);
+    }
+}
+
 recit.filter.cahiercanada.Main = class
 {
     constructor(){       
@@ -33,6 +50,7 @@ recit.filter.cahiercanada.Main = class
         this.init = this.init.bind(this);
 
         this.inputList = {};
+        this.webApi = null;
         this.init();
     }
 
@@ -53,6 +71,8 @@ recit.filter.cahiercanada.Main = class
         }
 
         this.createCssClasses();
+
+        this.webApi = new recit.filter.cahiercanada.WebApi();
     }
 
     createCssClasses(){
@@ -70,7 +90,7 @@ recit.filter.cahiercanada.Main = class
     onSave(name){
         let input = this.inputList[name];
 		let data = {personalNoteId: 0, ccCmId: input.ccCmId, userId: input.userId, note: input.editor.getValue(), courseId: input.courseId };		
-        recit.http.WebApi.instance().saveStudentNote(data, (result) => this.onCallback(result));
+        this.webApi.saveStudentNote(data, (result) => this.onCallback(result));
         input.loading.style.display = 'block';
     }
 
@@ -79,7 +99,7 @@ recit.filter.cahiercanada.Main = class
         let data = {personalNoteId: 0, ccCmId: input.ccCmId, userId: input.userId, note: {text: "", itemid: 0}, courseId: input.courseId };		
         
         if(window.confirm(M.str.filter_recitcahiercanada.msgConfirmReset)){
-            recit.http.WebApi.instance().saveStudentNote(data, (result) => this.onCallback(result));
+            this.webApi.saveStudentNote(data, (result) => this.onCallback(result));
             input.loading.style.display = 'block';
         }
     }
