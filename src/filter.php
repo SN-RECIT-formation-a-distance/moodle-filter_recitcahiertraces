@@ -26,7 +26,7 @@ use recitcommon\Utils;
 use recitcahiertraces\PersistCtrl;
 
 class filter_recitcahiertraces extends moodle_text_filter {
-    
+   
     protected $nbEditorAtto = 0;
   //  protected $editorOption = "1"; // 1 = atto, 2 = recit editor
 

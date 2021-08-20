@@ -19,6 +19,7 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 defined('MOODLE_INTERNAL') || die();
+
 $plugin->version   = 2022020900;        // The current plugin version (Date: YYYYMMDDXX)
 $plugin->requires  = 2020061500.00; // Moodle 3.9.0
 $plugin->component = 'filter_recitcahiertraces'; // Full name of the plugin (used for diagnostics)
