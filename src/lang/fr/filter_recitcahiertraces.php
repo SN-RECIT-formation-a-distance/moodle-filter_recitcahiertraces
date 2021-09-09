@@ -1,7 +1,7 @@
 <?php
 
-$string['filtername'] = 'Cahier de traces';
-$string['pluginname'] = 'Cahier de traces';
+$string['filtername'] = 'Cahier de traces v2';
+$string['pluginname'] = 'Cahier de traces v2';
 $string['save'] = 'Enregistrer';
 $string['noteTitle'] = 'Titre de la note';
 $string['msgSuccess'] = "L'action a été complétée avec succès.";

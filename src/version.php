@@ -25,7 +25,7 @@ $plugin->component = 'filter_recitcahiertraces'; // Full name of the plugin (use
 // This is a list of plugins, this plugin depends on (and their versions).                                                          
 $plugin->dependencies = [
     'local_recitcommon' => 2021050400, // ANY_VERSION
-	'mod_recitcahiertraces' => 2021050400
+	'mod_recitcahiertraces' => 2021080400
 ];
-$plugin->release = 'R13-V1.13.1'; 
-$plugin->maturity = MATURITY_BETA; // MATURITY_ALPHA, MATURITY_BETA, MATURITY_RC or MATURITY_STABLE
+$plugin->release = 'R14-V2.14.1'; 
+$plugin->maturity = MATURITY_ALPHA; // MATURITY_ALPHA, MATURITY_BETA, MATURITY_RC or MATURITY_STABLE
