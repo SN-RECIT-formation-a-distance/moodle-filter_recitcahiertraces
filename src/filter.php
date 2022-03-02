@@ -78,7 +78,7 @@ class filter_recitcahiertraces extends moodle_text_filter {
     }
 
 	public function filter($text, array $options = array()) {
-		global $DB, $USER, $PAGE;
+		global $DB, $USER, $PAGE, $COURSE;
 
 		if (!is_string($text) or empty($text)) {
 			// Non-string data can not be filtered anyway.
@@ -101,7 +101,7 @@ class filter_recitcahiertraces extends moodle_text_filter {
 				$obj = null;
 				if(isset($json->intCode)){
                     try{
-                        $obj = PersistCtrl::getInstance($DB)->getUserNote(null, $USER->id, $json->intCode);
+                        $obj = PersistCtrl::getInstance($DB)->getUserNote(null, $USER->id, $json->intCode, $COURSE->id);
                     }
                     catch(Exception $ex){
                         return $ex->GetMessage();
