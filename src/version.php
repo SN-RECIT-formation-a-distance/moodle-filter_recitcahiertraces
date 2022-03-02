@@ -28,5 +28,5 @@ $plugin->dependencies = [
     'local_recitcommon' => 2022020900, // ANY_VERSION
 	'mod_recitcahiertraces' => 2022020900
 ];
-$plugin->release = 'v2.0.0'; 
+$plugin->release = 'v2.0.1'; 
 $plugin->maturity = MATURITY_ALPHA; // MATURITY_ALPHA, MATURITY_BETA, MATURITY_RC or MATURITY_STABLE
