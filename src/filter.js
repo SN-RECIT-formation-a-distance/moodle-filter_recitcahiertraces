@@ -113,8 +113,8 @@ recit.filter.cahiertraces.Main = class
 
         // refresh the many instances of the integration code
         for(let attr in this.inputList){
-            // get all the common editors (same nCmId)
-            if(attr.indexOf(`ncmid${result.data.nCmId}`) >= 0){
+            // get all the common editors (same nId)
+            if(parseInt(this.inputList[attr].nId,10) === parseInt(result.data.noteDef.id)){
                 this.inputList[attr].editor.setValue(result.data.noteContent.text);
 
                 if(this.inputList[attr].view !== null){
