@@ -1,4 +1,5 @@
 <?php
+$string['privacy:metadata'] = 'This plugin does not store any personal data.';
 
 $string['filtername'] = 'Cahier de traces v2';
 $string['pluginname'] = 'Cahier de traces v2';
