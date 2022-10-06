@@ -20,9 +20,9 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 require_once($CFG->dirroot . "/mod/recitcahiertraces/classes/PersistCtrl.php");
-require_once($CFG->dirroot . "/local/recitcommon/php/Utils.php");
+require_once($CFG->dirroot . "/mod/recitcahiertraces/classes/recitcommon/Utils.php");
 
-use recitcommon\Utils;
+use recitcahiertraces\Utils;
 use recitcahiertraces\PersistCtrl;
 
 class filter_recitcahiertraces extends moodle_text_filter {

@@ -25,7 +25,6 @@ $plugin->requires  = 2020061500.00; // Moodle 3.9.0
 $plugin->component = 'filter_recitcahiertraces'; // Full name of the plugin (used for diagnostics)
 // This is a list of plugins, this plugin depends on (and their versions).                                                          
 $plugin->dependencies = [
-    'local_recitcommon' => 2022020900, // ANY_VERSION
 	'mod_recitcahiertraces' => 2022020900
 ];
 $plugin->release = 'v2.0.2'; 
