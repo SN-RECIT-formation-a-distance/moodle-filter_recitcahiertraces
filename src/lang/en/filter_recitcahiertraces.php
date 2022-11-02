@@ -1,8 +1,8 @@
 <?php
 $string['privacy:metadata'] = 'This plugin does not store any personal data.';
 
-$string['filtername'] = 'Cahier de traces v2';
-$string['pluginname'] = 'Cahier de traces v2';
+$string['filtername'] = 'Notebook';
+$string['pluginname'] = 'Notebook filter';
 $string['save'] = 'Save';
 $string['noteTitle'] = 'Note Title';
 $string['msgSuccess'] = "The action has been completed successfully.";
@@ -16,4 +16,5 @@ $string['editor_option_desc'] = "The existing options are Atto Editor (default M
 $string['atto_editor'] = "Atto Editor";
 $string['recit_editor'] = "RÉCIT Editor";
 $string['seeMyNotes'] = "See my notes";
-//$string['msgSaveAuto'] = "The note is not saved yet. Do you want to proceed and save the note?";
+$string['loading'] = "Loading";
+$string['codenotfound'] = "Code not found";

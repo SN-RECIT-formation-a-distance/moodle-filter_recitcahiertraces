@@ -63,6 +63,7 @@ recit.filter.cahiertraces.Main = class
             this.inputList[name].dom = item;
             this.inputList[name].nCmId = item.getAttribute('data-pn-ncmid');
             this.inputList[name].nId = item.getAttribute('data-pn-nid');
+            this.inputList[name].unId = item.getAttribute('data-pn-unid');
             this.inputList[name].userId = item.getAttribute('data-pn-userid');
             this.inputList[name].courseId = item.getAttribute('data-pn-courseid');
             this.inputList[name].view = this.inputList[name].dom.querySelector(`[id="${name}_view"]`) || null;
@@ -109,7 +110,7 @@ recit.filter.cahiertraces.Main = class
 
     onSave(name){
         let input = this.inputList[name];
-        let data = {unId: 0, nId: input.nId, nCmId: input.nCmId, userId: input.userId, note: input.editor.getValue(), courseId: input.courseId };		
+        let data = {unId: input.unId, nId: input.nId, nCmId: input.nCmId, userId: input.userId, note: input.editor.getValue(), courseId: input.courseId };		
         this.webApi.saveStudentNote(data, (result) => this.onCallback(result));
         input.loading.style.display = 'block';
         this.backdrop.style.display = 'block';
@@ -117,7 +118,7 @@ recit.filter.cahiertraces.Main = class
 
     onReset(name){
         let input = this.inputList[name];
-        let data = {unId: 0,  nId: input.nId, nCmId: input.nCmId, userId: input.userId, note: {text: "", itemid: 0}, courseId: input.courseId };		
+        let data = {unId: input.unId, nId: input.nId, nCmId: input.nCmId, userId: input.userId, note: {text: "", itemid: 0}, courseId: input.courseId };		
         
         if(window.confirm(M.str.filter_recitcahiertraces.msgConfirmReset)){
             this.webApi.saveStudentNote(data, (result) => this.onCallback(result));
@@ -157,6 +158,5 @@ recit.filter.cahiertraces.Main = class
 
 var recitFilterCahierTraces = null;
 
-recit.utils.onDocumentReady(function(){
-recitFilterCahierTraces = new recit.filter.cahiertraces.Main();
-});
+
+Y.on('domready', () => recitFilterCahierTraces = new recit.filter.cahiertraces.Main());

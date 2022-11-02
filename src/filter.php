@@ -28,7 +28,6 @@ use recitcahiertraces\PersistCtrl;
 class filter_recitcahiertraces extends moodle_text_filter {
    
     protected $nbEditorAtto = 0;
-  //  protected $editorOption = "1"; // 1 = atto, 2 = recit editor
 
      /**
      * Set any context-specific configuration for this filter.
@@ -37,32 +36,14 @@ class filter_recitcahiertraces extends moodle_text_filter {
      * @param array $localconfig Any context-specific configuration for this filter.
      */
     public function __construct($context, array $localconfig) {
-        //global $PAGE, $CFG;
-
         parent::__construct($context, $localconfig);
-
-       /* if($context instanceof context_course){
-            // the CSS needs to be loaded here because on the function setup it is too late
-            $cssRecitEditor = $CFG->wwwroot .'/local/recitcommon/js/recit_rich_editor/build/index.css';
-            if(file_exists($cssRecitEditor)){
-                $PAGE->requires->css(new moodle_url($cssRecitEditor), true);
-            }
-        }*/
     }
 
 	public function setup($page, $context) {
 		global $CFG, $OUTPUT;
 
-       // $this->editorOption = get_config('filter_recitcahiertraces', 'editorOption');
-
-		$page->requires->js(new moodle_url($CFG->wwwroot . '/local/recitcommon/js/RecitApi.js'), true);
-		$page->requires->js(new moodle_url($CFG->wwwroot . '/local/recitcommon/js/Components.js'), true);
-        $page->requires->js(new moodle_url($CFG->wwwroot . '/local/recitcommon/js/Utils.js'), true);
-        $page->requires->js(new moodle_url($CFG->wwwroot .'/filter/recitcahiertraces/filter.js'), true);        
-
-     /*   if($this->editorOption == "2"){
-            $page->requires->js(new moodle_url($CFG->wwwroot .'/local/recitcommon/js/recit_rich_editor/build/index.js'), true);
-        }*/
+        $page->requires->js(new moodle_url($CFG->wwwroot .'/filter/recitcahiertraces/RecitApi.js'), true);
+        $page->requires->js(new moodle_url($CFG->wwwroot .'/filter/recitcahiertraces/filter.js'), true);
 
         $page->requires->string_for_js('msgSuccess', 'filter_recitcahiertraces');
         $page->requires->string_for_js('msgConfirmReset', 'filter_recitcahiertraces');
@@ -108,7 +89,7 @@ class filter_recitcahiertraces extends moodle_text_filter {
                     }   
                     
                     if($obj == null){
-                        $text = "Cahier de traces v2 - Erreur: code d'intégration intCode: $json->intCode introuvable.";
+                        $text = get_string('codenotfound', "filter_recitcahiertraces")." ".$json->intCode;
                     }
 				}
 
@@ -134,13 +115,8 @@ class filter_recitcahiertraces extends moodle_text_filter {
     }	
     
     protected function getEditorOption($name, $dbData, $intCode){
-       /* if($this->editorOption == "2"){
-            return "<div id='{$name}_container' data-format='recit_rich_editor'>{$dbData->note->text}</div>";
-        }
-        else{*/
-            $context = \context_course::instance($dbData->noteDef->group->ct->courseId);
-            return Utils::createEditorHtml(true, "{$name}_container", $name, $dbData->noteContent->text, $intCode->nbLines, $context, $dbData->noteContent->itemid);
-       // }
+        $context = \context_course::instance($dbData->noteDef->group->ct->courseId);
+        return Utils::createEditorHtml(true, "{$name}_container", $name, $dbData->noteContent->text, $intCode->nbLines, $context, $dbData->noteContent->itemid);
     }
 
     protected function getPersonalNoteFormEmbedded($dbData, $userId, $intCode){
@@ -150,11 +126,10 @@ class filter_recitcahiertraces extends moodle_text_filter {
         $nCmId = $PAGE->cm->id;
         $name = sprintf( "ncmid%satto%s", $nCmId, $this->nbEditorAtto);
        
-        $result = "<div class='personal-note-embedded' data-pn-name='$name' data-pn-nid='{$dbData->noteDef->id}' data-pn-ncmid='{$nCmId}' data-pn-userid='$userId' data-pn-courseid='{$dbData->noteDef->group->ct->courseId}'>";	
+        $result = "<div class='personal-note-embedded' data-pn-name='$name' data-pn-nid='{$dbData->noteDef->id}' data-pn-unid='{$dbData->id}' data-pn-ncmid='{$nCmId}' data-pn-userid='$userId' data-pn-courseid='{$dbData->noteDef->group->ct->courseId}'>";	
         $result .= "<div style='display: flex; justify-content: space-between;'>";
         $result .= sprintf("<label class='title' style='%s'>%s</label>", (!empty($intCode->color) ? "color: {$intCode->color}" : ""), $dbData->noteDef->title);
         $result .= "<span>";
-//        $result .= "<span class='text-muted p-2'>Cahier de traces <img src='$CFG->wwwroot/filter/recitcahiertraces/pix/icon.png' alt='RÉCIT' width='20px' height='20px'/></span>";
         $result .= "</span>";
         $result .= "</div>";
 
@@ -184,7 +159,7 @@ class filter_recitcahiertraces extends moodle_text_filter {
 
         $result .= "<div id='{$name}_loading' class='recit-loading' style='display:none;'>";
         $result .= "<i class='fa fa-spinner fa-pulse fa-3x fa-fw'></i>";
-        $result .= "<span class='sr-only'>Loading...</span>";
+        $result .= "<span class='sr-only'>".get_string('loading', "filter_recitcahiertraces")."...</span>";
         $result .= "</div>";
 
         $result .= "</div>";		
