@@ -1,6 +1,20 @@
-.personal-note-embedded .title{font-weight: 500; font-size: 20px;}
+.filter-recitcahiertraces_personal-note-embedded .title{font-weight: 500; font-size: 20px;}
 
 @media screen and (max-width: 767px){
-    .personal-note-embedded .btn-group .btn{font-size: 0; }
-    .personal-note-embedded .btn-group i{font-size: initial;} 
+    .filter-recitcahiertraces_personal-note-embedded .btn-group .btn{font-size: 0; }
+    .filter-recitcahiertraces_personal-note-embedded .btn-group i{font-size: initial;} 
+}
+
+.filter-recitcahiertraces_recit-loading { display: none; font-size: 40px; position: fixed; top: 50%; left: 50%; z-index: 2000; 
+    transform: translate(-50%, -50%); transform: -webkit-translate(-50%, -50%); transform: -moz-translate(-50%, -50%); transform: -ms-translate(-50%, -50%); 
+}
+
+.filter-recitcahiertraces_recit-backdrop {
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 1040;
+        width: 100vw;
+        height: 100vh;
+        background-color: #00000080;
 }

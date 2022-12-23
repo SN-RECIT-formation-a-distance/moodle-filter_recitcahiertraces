@@ -126,7 +126,7 @@ class filter_recitcahiertraces extends moodle_text_filter {
         $nCmId = $PAGE->cm->id;
         $name = sprintf( "ncmid%satto%s", $nCmId, $this->nbEditorAtto);
        
-        $result = "<div class='personal-note-embedded' data-pn-name='$name' data-pn-nid='{$dbData->noteDef->id}' data-pn-unid='{$dbData->id}' data-pn-ncmid='{$nCmId}' data-pn-userid='$userId' data-pn-courseid='{$dbData->noteDef->group->ct->courseId}'>";	
+        $result = "<div class='filter-recitcahiertraces_personal-note-embedded' data-pn-name='$name' data-pn-nid='{$dbData->noteDef->id}' data-pn-unid='{$dbData->id}' data-pn-ncmid='{$nCmId}' data-pn-userid='$userId' data-pn-courseid='{$dbData->noteDef->group->ct->courseId}'>";	
         $result .= "<div style='display: flex; justify-content: space-between;'>";
         $result .= sprintf("<label class='title' style='%s'>%s</label>", (!empty($intCode->color) ? "color: {$intCode->color}" : ""), $dbData->noteDef->title);
         $result .= "<span>";
@@ -157,7 +157,7 @@ class filter_recitcahiertraces extends moodle_text_filter {
 
         $result .= '</div>';
 
-        $result .= "<div id='{$name}_loading' class='recit-loading' style='display:none;'>";
+        $result .= "<div id='{$name}_loading' class='filter-recitcahiertraces_recit-loading' style='display:none;'>";
         $result .= "<i class='fa fa-spinner fa-pulse fa-3x fa-fw'></i>";
         $result .= "<span class='sr-only'>".get_string('loading', "filter_recitcahiertraces")."...</span>";
         $result .= "</div>";

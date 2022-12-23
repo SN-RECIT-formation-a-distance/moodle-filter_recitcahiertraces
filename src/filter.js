@@ -72,33 +72,15 @@ recit.filter.cahiertraces.Main = class
             this.inputList[name].feedback = this.inputList[name].dom.querySelector(`[id="${name}_feedback"]`);
         }
 
-        this.createCssClasses();
         this.createBackdrop();
 
         this.webApi = new recit.filter.cahiertraces.WebApi();
     }
 
-    createCssClasses(){
-        let style = document.createElement('style');
-        style.type = 'text/css';
-        style.innerHTML = `.recit-loading { display: none; font-size: 40px; position: fixed; top: 50%; left: 50%; z-index: 2000; 
-                            transform: translate(-50%, -50%); transform: -webkit-translate(-50%, -50%); transform: -moz-translate(-50%, -50%); transform: -ms-translate(-50%, -50%); }
-                            .recit-backdrop {
-                                position: fixed;
-                                top: 0;
-                                left: 0;
-                                z-index: 1040;
-                                width: 100vw;
-                                height: 100vh;
-                                background-color: #00000080;
-                            }`;
-        document.getElementsByTagName('head')[0].appendChild(style);
-    }
-
     createBackdrop(){
         
         this.backdrop = document.createElement('div');
-        this.backdrop.classList.add('recit-backdrop');
+        this.backdrop.classList.add('filter-recitcahiertraces_recit-backdrop');
         this.backdrop.style.display = 'none';
         
         document.body.appendChild(this.backdrop);
