@@ -16,9 +16,11 @@
 
 /**
  * @package   filter_recitcahiertraces
- * @copyright 2019 RÉCIT 
+ * @copyright 2019 RÉCIT
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+
+defined('MOODLE_INTERNAL') || die();
 require_once($CFG->dirroot . "/mod/recitcahiertraces/classes/PersistCtrl.php");
 require_once($CFG->dirroot . "/mod/recitcahiertraces/classes/recitcommon/Utils.php");
 
@@ -26,7 +28,7 @@ use recitcahiertraces\Utils;
 use recitcahiertraces\PersistCtrl;
 
 class filter_recitcahiertraces extends moodle_text_filter {
-   
+
     protected $nbEditorAtto = 0;
 
      /**
