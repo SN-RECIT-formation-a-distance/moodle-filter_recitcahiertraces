@@ -7,3 +7,5 @@ The Notebook allows students to write their course notes within all the resource
 ## Dependencies
 mod_recitcahiertraces (https://github.com/SN-RECIT-formation-a-distance/mp-mod-recitcahiertraces)
 
+## Post-installation steps
+This filter must be activated in admin / filters / Manage Filters, applicable to "content".
