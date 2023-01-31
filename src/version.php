@@ -28,5 +28,5 @@ $plugin->dependencies = [
 	'mod_recitcahiertraces' => 2023012300
 ];
 $plugin->release = 'v2.1.0-beta'; 
-$plugin->supported = [39, 401];      //  Moodle 3.9.x, 3.10.x and 3.11.x are supported. 
+$plugin->supported = [39, 410];      //  Moodle 3.9.x, 3.10.x and 3.11.x are supported. 
 $plugin->maturity = MATURITY_BETA; // MATURITY_ALPHA, MATURITY_BETA, MATURITY_RC or MATURITY_STABLE
