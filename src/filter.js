@@ -35,6 +35,7 @@ recit.filter.cahiertraces.WebApi = class
         let options = {};
         options.service = "saveUserNote";
         options.data = data;
+        options.sesskey = M.cfg.sesskey;
         options.flags = {mode: 's'};
         this.webApi.post(this.gateway, options, onSuccess);
     }
