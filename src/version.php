@@ -20,13 +20,13 @@
  */
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version   = 2023012300;        // The current plugin version (Date: YYYYMMDDXX)
+$plugin->version   = 2023012301;        // The current plugin version (Date: YYYYMMDDXX)
 $plugin->requires  = 2020061500.00; // Moodle 3.9.0
 $plugin->component = 'filter_recitcahiertraces'; // Full name of the plugin (used for diagnostics)
 // This is a list of plugins, this plugin depends on (and their versions).                                                          
 $plugin->dependencies = [
 	'mod_recitcahiertraces' => 2023012300
 ];
-$plugin->release = 'v2.2.0-beta'; 
+$plugin->release = 'v2.2.1-beta'; 
 $plugin->supported = [39, 410];      //  Moodle 3.9.x, 3.10.x and 3.11.x are supported. 
 $plugin->maturity = MATURITY_BETA; // MATURITY_ALPHA, MATURITY_BETA, MATURITY_RC or MATURITY_STABLE

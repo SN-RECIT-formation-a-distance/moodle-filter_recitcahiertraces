@@ -87,11 +87,11 @@ class filter_recitcahiertraces extends moodle_text_filter {
                         $obj = PersistCtrl::getInstance($DB)->getUserNote(null, $USER->id, $json->intCode, $COURSE->id);
                     }
                     catch(Exception $ex){
-                        return $ex->GetMessage();
                     }   
                     
                     if($obj == null){
-                        $text = get_string('codenotfound', "filter_recitcahiertraces")." ".$json->intCode;
+                        $replace = get_string('codenotfound', "filter_recitcahiertraces")." ".$json->intCode;
+                        $text = $this->str_replace_first($match[0], $replace, $text);
                     }
 				}
 
