@@ -121,6 +121,7 @@ recit.filter.cahiertraces.Main = class
             // get all the common editors (same nId)
             if(parseInt(this.inputList[attr].nId,10) === parseInt(result.data.noteDef.id)){
                 this.inputList[attr].editor.setValue(result.data.noteContent.text);
+                this.inputList[attr].unId = result.data.id;
 
                 if(this.inputList[attr].view !== null){
                     this.inputList[attr].view.innerHTML = result.data.noteContent.text;
