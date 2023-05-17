@@ -27,6 +27,6 @@ $plugin->component = 'filter_recitcahiertraces'; // Full name of the plugin (use
 $plugin->dependencies = [
 	'mod_recitcahiertraces' => 2023012301
 ];
-$plugin->release = 'v2.2.2-beta'; 
+$plugin->release = 'v2.3.0-beta'; 
 $plugin->supported = [311, 410];      //  Moodle 3.9.x, 3.10.x and 3.11.x are supported. 
 $plugin->maturity = MATURITY_BETA; // MATURITY_ALPHA, MATURITY_BETA, MATURITY_RC or MATURITY_STABLE
