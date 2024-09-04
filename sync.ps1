@@ -1,5 +1,5 @@
 $from = "moodle-filter_recitcahiertraces/src/*"
-$to = "shared/recitfad/filter/recitcahiertraces/"
+$to = "shared/recitfad3/filter/recitcahiertraces/"
 
 try {
     . ("..\sync\watcher.ps1")
