@@ -257,6 +257,16 @@ recit.components.EditorDecorator = class
         }
     }
 
+    setEditorValuesFromDOM(obj){
+        for(let attr in obj){
+            let name = `${this.id}[${attr}]`;
+            let el = this.dom.querySelector(`[name="${name}"]`);
+            if(el !== null){
+                obj[attr] = el.value;
+            }
+        }
+    }
+
     getValue(){        
         let result  = {text: "", format: "", itemid: 0};
 
@@ -264,13 +274,7 @@ recit.components.EditorDecorator = class
 
         switch(this.format){
             case 'atto_texteditor':
-				for(let attr in result){
-					let name = `${this.id}[${attr}]`;
-					let el = this.dom.querySelector(`[name="${name}"]`);
-					if(el !== null){
-						result[attr] = el.value;
-                    }
-                }
+				this.setEditorValuesFromDOM(result);
                 break;
             case 'textarea_texteditor':
                 result.text = this.dom.getElementsByTagName("textarea")[0].value;
@@ -280,7 +284,7 @@ recit.components.EditorDecorator = class
                 result.text = this.dom.querySelector(`[data-recit-rich-editor="content"]`).innerHTML;
                 break;
             case 'editor_tiny\\editor':
-                result.text = this.dom.querySelector('iframe').contentDocument.body.innerHTML
+                this.setEditorValuesFromDOM(result);
                 break;
             default: 
                 alert("Editor: unknown format");
