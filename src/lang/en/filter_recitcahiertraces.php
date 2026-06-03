@@ -19,7 +19,7 @@
  * @copyright 2019 RÉCIT
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-$string['privacy:metadata'] = 'This plugin does not store any personal data.';
+$string['privacy:metadata'] = 'This filter plugin does not store any personal data of its own. It renders notebook entries managed by the mod_recitcahiertraces activity module, which is responsible for storing and protecting that data. Only the currently authenticated user\'s own notes are accessed and displayed.';
 
 $string['filtername'] = 'Notebook';
 $string['pluginname'] = 'Notebook filter';

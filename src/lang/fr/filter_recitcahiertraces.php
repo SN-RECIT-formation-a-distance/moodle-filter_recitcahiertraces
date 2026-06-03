@@ -20,7 +20,7 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-$string['privacy:metadata'] = 'Ce plugin ne conserve aucune donnée personelle.';
+$string['privacy:metadata'] = 'Ce filtre ne conserve aucune donnée personnelle qui lui est propre. Il affiche les entrées du cahier de traces gérées par le module d\'activité mod_recitcahiertraces, qui est responsable de la conservation et de la protection de ces données. Seules les notes de l\'utilisateur actuellement authentifié sont consultées et affichées.';
 $string['filtername'] = 'Cahier de traces v2';
 $string['pluginname'] = 'Cahier de traces v2';
 $string['save'] = 'Enregistrer';
