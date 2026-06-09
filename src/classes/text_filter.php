@@ -84,14 +84,10 @@ class text_filter extends \core_filters\text_filter {
                 // $match[1] = offset
                 $json = json_decode($match[0]);
 
-                // Require a valid positive integer intCode; skip anything else
-                // (avoids processing tokens from other filters like Generico).
-                if (!is_object($json) || !isset($json->intCode)
-                        || !is_numeric($json->intCode) || (int)$json->intCode <= 0) {
+                // Skip tokens that are not note tokens (e.g. from Generico or other filters).
+                if (!is_object($json) || !isset($json->intCode)) {
                     continue;
                 }
-
-                $json->intCode = (int)$json->intCode;
 
                 $obj = null;
                 try {
